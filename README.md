@@ -11,8 +11,7 @@ organizations and their members, and ships a ready-to-run Jamf deployment script
 writes the correct `.mailsignature` files onto each Mac. You keep full control of your
 data — it runs on your own server.
 
-<!-- TODO: replace with a real screenshot, e.g. docs/screenshot.png -->
-<!-- ![MailSign dashboard](docs/screenshot.png) -->
+![MailSign dashboard](docs/screenshot.png)
 
 > **Why?** Most Apple Mail signature solutions are paid SaaS products that route your
 > staff data through a third party. If you run Jamf Pro, you don't need that — you need
