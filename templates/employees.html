@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Mitarbeiter") }} – Sig Manager{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="fw-semibold mb-0">{{ _("Mitarbeiter") }}</h4>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('employee_import') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-upload me-1"></i>{{ _("CSV Import") }}
+    </a>
+    <a href="{{ url_for('employee_new') }}" class="btn btn-primary btn-sm">
+      <i class="bi bi-person-plus me-1"></i>{{ _("Neu") }}
+    </a>
+  </div>
+</div>
+
+<!-- Filter -->
+<form method="GET" class="card p-3 mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-sm-5">
+      <input type="text" name="q" class="form-control form-control-sm"
+             placeholder="{{ _('Name oder E-Mail suchen…') }}" value="{{ search }}">
+    </div>
+    <div class="col-sm-4">
+      <select name="organization" class="form-select form-select-sm">
+        <option value="">{{ _("Alle Organisationen") }}</option>
+        {% for p in organizations %}
+          <option value="{{ p.id }}" {{ 'selected' if pid|string == p.id|string }}>{{ p.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-sm-3">
+      <button type="submit" class="btn btn-secondary btn-sm w-100">{{ _("Filtern") }}</button>
+    </div>
+  </div>
+</form>
+
+{% if employees %}
+{% macro sort_link(key, label) -%}
+  {% set next_dir = 'desc' if (sort == key and direction == 'asc') else 'asc' %}
+  <a href="{{ url_for('employees', q=search, organization=pid, sort=key, dir=next_dir) }}"
+     class="text-decoration-none text-reset d-inline-flex align-items-center gap-1">
+    {{ label }}
+    {% if sort == key %}
+      <i class="bi bi-caret-{{ 'down' if direction == 'desc' else 'up' }}-fill small"></i>
+    {% else %}
+      <i class="bi bi-arrow-down-up text-muted small opacity-50"></i>
+    {% endif %}
+  </a>
+{%- endmacro %}
+
+<!-- Quick filter (clientseitig) -->
+<div class="mb-2">
+  <input type="text" id="quickFilter" class="form-control form-control-sm"
+         placeholder="{{ _('In Tabelle filtern (Name, E-Mail, Telefon, Anwesenheit, Organisation)…') }}">
+</div>
+
+<div class="card">
+  <table class="table table-hover mb-0 align-middle" id="employeesTable">
+    <thead class="table-light">
+      <tr>
+        <th>{{ sort_link('name', _('Name')) }}</th>
+        <th>{{ sort_link('email', _('E-Mail')) }}</th>
+        <th>{{ sort_link('phone', _('Telefon')) }}</th>
+        <th>{{ _("Anwesenheit") }}</th>
+        <th>{{ sort_link('organization', _('Organisation')) }}</th>
+        <th class="text-center">{{ sort_link('active', _('Status')) }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in employees %}
+      <tr>
+        <td class="fw-medium">
+          {{ e.title ~ ' ' if e.title }}{{ e.first_name }}{% if e.last_name %} {{ e.last_name }}{% endif %}
+          {% if e.sig_label %}
+            <span class="badge bg-light text-secondary border ms-1" style="font-weight:400;">{{ e.sig_label }}</span>
+          {% endif %}
+        </td>
+        <td class="text-muted small">{{ e.email }}</td>
+        <td class="text-muted small">{{ e.phone or '–' }}</td>
+        <td class="text-muted small">{{ e.availability or '–' }}</td>
+        <td class="text-muted small">{{ e.organization_name }}</td>
+        <td class="text-center">
+          {% if e.active %}
+            <span class="badge bg-success-subtle text-success">{{ _("Aktiv") }}</span>
+          {% else %}
+            <span class="badge bg-secondary-subtle text-secondary">{{ _("Inaktiv") }}</span>
+          {% endif %}
+        </td>
+        <td class="text-end">
+          <a href="{{ url_for('employee_preview', eid=e.id) }}"
+             class="btn btn-sm btn-outline-info me-1" title="{{ _('Vorschau') }}" target="_blank">
+            <i class="bi bi-eye"></i>
+          </a>
+          <a href="{{ url_for('employee_edit', eid=e.id) }}"
+             class="btn btn-sm btn-outline-secondary me-1" title="{{ _('Bearbeiten') }}">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <button type="button" class="btn btn-sm btn-outline-danger" title="{{ _('Löschen') }}"
+                  onclick="confirmDelete('{{ url_for('employee_delete', eid=e.id) }}',
+                  '{{ e.first_name }} {{ e.last_name or '' }}')">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="text-muted small mt-2"><span id="rowCount">{{ employees|length }}</span> {{ _("Einträge") }}</div>
+{% else %}
+<div class="card p-5 text-center text-muted">
+  <i class="bi bi-people fs-1 mb-3"></i>
+  <p>{{ _("Keine Mitarbeiter gefunden.") }}</p>
+  <a href="{{ url_for('employee_new') }}" class="btn btn-primary btn-sm mx-auto" style="width:fit-content">
+    {{ _("Ersten Mitarbeiter anlegen") }}
+  </a>
+</div>
+{% endif %}
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-exclamation-triangle text-danger fs-2 mb-2 d-block"></i>
+        <p><strong id="deleteName"></strong> wirklich löschen?</p>
+      </div>
+      <div class="modal-footer justify-content-center border-0 pt-0">
+        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ _("Abbrechen") }}</button>
+        <form id="deleteForm" method="POST">
+          <button type="submit" class="btn btn-sm btn-danger">{{ _("Löschen") }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function confirmDelete(url, name) {
+  document.getElementById('deleteForm').action = url;
+  document.getElementById('deleteName').textContent = name.trim();
+  new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+
+// Clientseitiger Quickfilter
+(function() {
+  const input = document.getElementById('quickFilter');
+  const table = document.getElementById('employeesTable');
+  const counter = document.getElementById('rowCount');
+  if (!input || !table) return;
+  const rows = Array.from(table.tBodies[0].rows);
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let visible = 0;
+    rows.forEach(r => {
+      const txt = r.textContent.toLowerCase();
+      const show = !q || txt.includes(q);
+      r.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (counter) counter.textContent = visible;
+  });
+})();
+</script>
+{% endblock %}

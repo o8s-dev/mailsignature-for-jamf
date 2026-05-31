@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Mitarbeiter bearbeiten') if employee else _('Neuer Mitarbeiter') }} – Sig Manager{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center mb-4 gap-2">
+  <a href="{{ url_for('employees') }}" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <h4 class="fw-semibold mb-0">{{ _('Mitarbeiter bearbeiten') if employee else _('Neuer Mitarbeiter') }}</h4>
+</div>
+
+<div class="card p-4" style="max-width:580px">
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-sm-4">
+        <label class="form-label fw-medium">{{ _("Titel / Grad") }}</label>
+        <input type="text" name="title" class="form-control" placeholder="{{ _('z.B. Dr.') }}"
+               value="{{ employee.title if employee else '' }}">
+      </div>
+      <div class="col-sm-4">
+        <label class="form-label fw-medium">{{ _("Vorname") }} *</label>
+        <input type="text" name="first_name" class="form-control" required
+               value="{{ employee.first_name if employee else '' }}">
+      </div>
+      <div class="col-sm-4">
+        <label class="form-label fw-medium">{{ _("Nachname") }}</label>
+        <input type="text" name="last_name" class="form-control"
+               value="{{ employee.last_name if employee and employee.last_name else '' }}">
+      </div>
+      <div class="col-sm-8">
+        <label class="form-label fw-medium">{{ _("E-Mail-Adresse") }} *</label>
+        <input type="text" name="email" class="form-control" required
+               inputmode="email" autocapitalize="off" autocomplete="off"
+               spellcheck="false"
+               pattern="\S+@\S+\.\S+"
+               placeholder="{{ _('vorname.nachname@beispiel.ch') }}"
+               value="{{ employee.email if employee else '' }}">
+        <div class="form-text">{{ _("Wird verwendet um den Mail-Account auf dem Gerät zuzuordnen.") }}</div>
+      </div>
+      <div class="col-sm-4">
+        <label class="form-label fw-medium">{{ _("Bezeichnung") }}</label>
+        <input type="text" name="sig_label" class="form-control"
+               placeholder="{{ _('z.B. Hauptsitz') }}"
+               value="{{ employee.sig_label if employee and employee.sig_label else '' }}">
+        <div class="form-text">{{ _("Optional. Bei mehreren Signaturen pro E-Mail.") }}</div>
+      </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-medium">{{ _("Direkttelefon") }}</label>
+        <input type="text" name="phone" class="form-control" placeholder="055 555 05 05"
+               value="{{ employee.phone if employee else '' }}">
+        <div class="form-text">{{ _("Falls leer, wird die Organisations-Nummer verwendet.") }}</div>
+      </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-medium">{{ _("Organisation") }} *</label>
+        <select name="organization_id" class="form-select" required>
+          <option value="">{{ _("– Bitte wählen –") }}</option>
+          {% for p in organizations %}
+            <option value="{{ p.id }}"
+              {{ 'selected' if employee and employee.organization_id == p.id }}>
+              {{ p.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-medium">{{ _("Anwesenheit") }}</label>
+        <input type="text" name="availability" class="form-control"
+               placeholder="{{ _('z.B. Mo-Fr 08:00 - 17:00 Uhr') }}"
+               value="{{ employee.availability if employee and employee.availability else '' }}">
+        <div class="form-text">{{ _("Optional. Wird in der Signatur unter den Kontaktangaben angezeigt.") }}</div>
+      </div>
+      {% if employee %}
+      <div class="col-12">
+        <div class="form-check">
+          <input type="checkbox" name="active" class="form-check-input" id="activeCheck"
+                 {{ 'checked' if employee.active }}>
+          <label class="form-check-label" for="activeCheck">{{ _("Mitarbeiter aktiv") }}</label>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="d-flex gap-2 mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check2 me-1"></i>{{ _("Speichern") }}
+      </button>
+      {% if employee %}
+      <a href="{{ url_for('employee_preview', eid=employee.id) }}"
+         class="btn btn-outline-info" target="_blank">
+        <i class="bi bi-eye me-1"></i>{{ _("Vorschau") }}
+      </a>
+      {% endif %}
+      <a href="{{ url_for('employees') }}" class="btn btn-outline-secondary">{{ _("Abbrechen") }}</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

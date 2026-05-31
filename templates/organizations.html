@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Organisationen") }} – Sig Manager{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-semibold mb-0">{{ _("Organisationen") }}</h4>
+  <a href="{{ url_for('organization_new') }}" class="btn btn-primary btn-sm">
+    <i class="bi bi-plus-circle me-1"></i>{{ _("Neue Organisation") }}
+  </a>
+</div>
+
+{% if organizations %}
+<div class="card">
+  <table class="table table-hover mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>{{ _("Organisation") }}</th>
+        <th>{{ _("Adresse") }}</th>
+        <th>{{ _("Telefon") }}</th>
+        <th class="text-center">{{ _("Mitarbeiter") }}</th>
+        <th class="text-center">{{ _("Logo") }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in organizations %}
+      <tr>
+        <td class="fw-medium">{{ p.name }}</td>
+        <td class="text-muted small">{{ p.address1 }}<br>{{ p.address2 }}</td>
+        <td class="text-muted small">{{ p.phone or '–' }}</td>
+        <td class="text-center">
+          <span class="badge bg-success-subtle text-success">{{ p.emp_count }}</span>
+        </td>
+        <td class="text-center">
+          {% if p.logo %}
+            <img src="{{ url_for('static', filename='logos/' ~ p.logo) }}"
+                 style="max-height:32px; max-width:80px; object-fit:contain;">
+          {% else %}
+            <span class="text-muted">–</span>
+          {% endif %}
+        </td>
+        <td class="text-end">
+          <a href="{{ url_for('organization_edit', oid=p.id) }}" class="btn btn-sm btn-outline-secondary me-1">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <button type="button" class="btn btn-sm btn-outline-danger"
+                  onclick="confirmDelete('{{ url_for('organization_delete', oid=p.id) }}', '{{ p.name }}')">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card p-5 text-center text-muted">
+  <i class="bi bi-building fs-1 mb-3"></i>
+  <p>{{ _("Noch keine Organisationen angelegt.") }}</p>
+  <a href="{{ url_for('organization_new') }}" class="btn btn-primary btn-sm mx-auto" style="width:fit-content">
+    {{ _("Erste Organisation anlegen") }}
+  </a>
+</div>
+{% endif %}
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-exclamation-triangle text-danger fs-2 mb-2 d-block"></i>
+        <p class="mb-1">Organisation <strong id="deleteName"></strong> {{ _("und alle zugehörigen Mitarbeiter löschen?") }}</p>
+        <p class="text-muted small">{{ _("Diese Aktion kann nicht rückgängig gemacht werden.") }}</p>
+      </div>
+      <div class="modal-footer justify-content-center border-0 pt-0">
+        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ _("Abbrechen") }}</button>
+        <form id="deleteForm" method="POST">
+          <button type="submit" class="btn btn-sm btn-danger">{{ _("Löschen") }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function confirmDelete(url, name) {
+  document.getElementById('deleteForm').action = url;
+  document.getElementById('deleteName').textContent = name;
+  new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

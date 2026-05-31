@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Benutzer") }} – Sig Manager{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0"><i class="bi bi-people me-2"></i>{{ _("Benutzer") }}</h3>
+  <a href="{{ url_for('user_new') }}" class="btn btn-primary btn-sm">
+    <i class="bi bi-person-plus me-1"></i>{{ _("Neuer Benutzer") }}
+  </a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>{{ _("Benutzername") }}</th>
+          <th>{{ _("Rolle") }}</th>
+          <th>{{ _("Erstellt") }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td class="fw-semibold">
+            <i class="bi bi-person me-1 text-muted"></i>{{ u.username }}
+            {% if u.id == session.user_id %}
+              <span class="badge bg-secondary ms-1">{{ _("Ich") }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if u.is_admin %}
+              <span class="badge bg-primary">{{ _("Administrator") }}</span>
+            {% else %}
+              <span class="badge bg-light text-dark border">{{ _("Benutzer") }}</span>
+            {% endif %}
+          </td>
+          <td class="text-muted small">{{ u.created_at[:10] }}</td>
+          <td class="text-end">
+            <a href="{{ url_for('user_edit', uid=u.id) }}" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-pencil"></i>
+            </a>
+            {% if u.id != session.user_id %}
+            <form method="post" action="{{ url_for('user_delete', uid=u.id) }}" class="d-inline"
+                  onsubmit="return confirm('Benutzer löschen?')">
+              <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

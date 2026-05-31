@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Jamf Deployment") }} – Sig Manager{% endblock %}
+{% block content %}
+<h4 class="fw-semibold mb-4">{{ _("Jamf Deployment") }}</h4>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <!-- Step 1 -->
+    <div class="card p-4 mb-3">
+      <h6 class="fw-semibold mb-3">
+        <span class="badge bg-primary rounded-circle me-2">1</span>
+        {{ _("Script herunterladen") }}
+      </h6>
+      <p class="text-muted small mb-3">
+        {{ _('Das Script ist auf Ihren Server vorkonfiguriert') }} (<code>{{ server_url }}</code>).
+        {{ _('Es lädt beim Ausführen automatisch die aktuellen Signaturdaten vom Server.') }}
+      </p>
+      <a href="{{ url_for('deploy_script') }}" class="btn btn-primary btn-sm">
+        <i class="bi bi-download me-1"></i>{{ _("deploy_signatures.sh herunterladen") }}
+      </a>
+    </div>
+
+    <!-- Step 1b -->
+    <div class="card p-4 mb-3 border-warning">
+      <h6 class="fw-semibold mb-3">
+        <span class="badge bg-warning text-dark rounded-circle me-2">1b</span>
+        {{ _("PPPC-Profil deployen") }} <span class="badge bg-warning text-dark ms-1" style="font-size:.7rem">{{ _("einmalig") }}</span>
+      </h6>
+      <p class="text-muted small mb-3">
+        {{ _('Damit das Script Apple Mail per AppleScript steuern darf, muss dieses Konfigurationsprofil auf alle Geräte deployed werden. Ohne dieses Profil findet das Script keine Mail-Accounts.') }}
+      </p>
+      <a href="{{ url_for('deploy_pppc') }}" class="btn btn-warning btn-sm">
+        <i class="bi bi-download me-1"></i>{{ _("SigManager-MailAutomation-PPPC.mobileconfig herunterladen") }}
+      </a>
+      <div class="mt-3 small text-muted">
+        {{ _('In Jamf:') }} <strong>Computers → Configuration Profiles → Upload</strong> → {{ _('Scope auf alle Geräte setzen → Speichern') }}
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="card p-4 mb-3">
+      <h6 class="fw-semibold mb-3">
+        <span class="badge bg-primary rounded-circle me-2">2</span>
+        {{ _("Script in Jamf Pro hochladen") }}
+      </h6>
+      <ol class="small text-muted ps-3 mb-0" style="line-height:2.2">
+        <li>{{ _('Jamf Pro öffnen →') }} <strong>Settings → Computer Management → Scripts</strong></li>
+        <li><strong>New</strong> {{ _('klicken, Script-Datei hochladen') }}</li>
+        <li>{{ _('Name:') }} <code>Deploy Mail Signatures</code></li>
+        <li>{{ _('Unter') }} <strong>Options</strong>: Priority = <strong>After</strong></li>
+        <li>{{ _("Speichern") }}</li>
+      </ol>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="card p-4 mb-3">
+      <h6 class="fw-semibold mb-3">
+        <span class="badge bg-primary rounded-circle me-2">3</span>
+        {{ _("Jamf Policy erstellen") }}
+      </h6>
+      <ol class="small text-muted ps-3 mb-0" style="line-height:2.2">
+        <li><strong>Computers → Policies → New</strong></li>
+        <li>{{ _('Trigger:') }} <strong>Login</strong> {{ _('und/oder') }} <strong>Recurring Check-in</strong></li>
+        <li>Frequency: <strong>Once per day</strong> {{ _('(oder Once per week)') }}</li>
+        <li>{{ _('Unter') }} <strong>Scripts</strong>: {{ _('das hochgeladene Script hinzufügen') }}</li>
+        <li>{{ _("Scope auf die gewünschten Geräte / Gruppen setzen") }}</li>
+        <li>{{ _("Policy aktivieren und speichern") }}</li>
+      </ol>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="card p-4">
+      <h6 class="fw-semibold mb-3">
+        <span class="badge bg-primary rounded-circle me-2">4</span>
+        {{ _("Signaturen aktualisieren") }}
+      </h6>
+      <p class="text-muted small mb-2">
+        {{ _("Bei Änderungen (neuer Mitarbeiter, Logo-Update, Textänderung):") }}
+      </p>
+      <ol class="small text-muted ps-3 mb-0" style="line-height:2.2">
+        <li>{{ _("Daten im Sig Manager anpassen") }}</li>
+        <li>{{ _('Policy in Jamf manuell auslösen') }} <em>{{ _('oder') }}</em> {{ _('beim nächsten Login automatisch') }}</li>
+        <li>{{ _("Das Script holt sich stets die aktuellen Daten vom Server") }}</li>
+      </ol>
+      <div class="alert alert-info mt-3 mb-0 small py-2">
+        <i class="bi bi-lightbulb me-1"></i>
+        {{ _("Kein Script-Update in Jamf nötig — nur die Daten im Web-Tool ändern.") }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card p-4 mb-3">
+      <h6 class="fw-semibold mb-3"><i class="bi bi-bar-chart me-2"></i>{{ _("Aktuelle Daten") }}</h6>
+      <div class="d-flex justify-content-between py-2 border-bottom">
+        <span class="text-muted small">{{ _("Aktive Mitarbeiter") }}</span>
+        <strong>{{ employee_count }}</strong>
+      </div>
+      <div class="d-flex justify-content-between py-2">
+        <span class="text-muted small">{{ _("Server-URL") }}</span>
+        <code class="small">{{ server_url }}</code>
+      </div>
+    </div>
+
+    <div class="card p-4 mb-3">
+      <h6 class="fw-semibold mb-2"><i class="bi bi-key me-2"></i>{{ _("API-Key") }}</h6>
+      <p class="text-muted small mb-2">
+        {{ _('Alle API-Endpunkte sind mit diesem Schlüssel geschützt. Er ist im heruntergeladenen Script bereits enthalten.') }}
+      </p>
+      <div class="input-group input-group-sm mb-2">
+        <input type="text" id="apiKeyField" class="form-control font-monospace"
+               value="{{ api_key }}" readonly>
+        <button class="btn btn-outline-secondary" type="button"
+                onclick="navigator.clipboard.writeText('{{ api_key }}');this.innerHTML='<i class=\'bi bi-check2\'></i>';setTimeout(()=>this.innerHTML='<i class=\'bi bi-clipboard\'></i>',1500)">
+          <i class="bi bi-clipboard"></i>
+        </button>
+      </div>
+      <form method="POST" action="{{ url_for('regenerate_api_key') }}"
+            onsubmit="return confirm('Neuen API-Key generieren? Das Jamf-Script muss danach erneut heruntergeladen und in Jamf aktualisiert werden.')">
+        <button type="submit" class="btn btn-outline-warning btn-sm">
+          <i class="bi bi-arrow-clockwise me-1"></i>{{ _("Neu generieren") }}
+        </button>
+      </form>
+    </div>
+
+    <div class="card p-4 bg-warning-subtle border-warning">
+      <h6 class="fw-semibold mb-2"><i class="bi bi-exclamation-triangle me-2"></i>{{ _("Wichtige Hinweise") }}</h6>
+      <ul class="small text-muted ps-3 mb-0" style="line-height:2">
+        <li>{{ _("Server muss von den Mac-Geräten erreichbar sein (internes Netz)") }}</li>
+        <li>{{ _("Script läuft als eingeloggter Benutzer (nicht root)") }}</li>
+        <li>{{ _("Apple Mail sollte beim Deployment geschlossen sein") }}</li>
+        <li>{{ _("Signatur-UUID basiert auf E-Mail → stabil bei Updates") }}</li>
+        <li>{{ _("macOS 12 Monterey bis 15 Sequoia unterstützt") }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

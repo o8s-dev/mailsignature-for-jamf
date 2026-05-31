@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Dashboard") }} – Sig Manager{% endblock %}
+{% block content %}
+<h4 class="mb-4 fw-semibold">{{ _("Dashboard") }}</h4>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-4">
+    <div class="card stat-card border-primary p-3">
+      <div class="text-muted small mb-1">{{ _("Organisationen") }}</div>
+      <div class="fs-2 fw-bold">{{ organization_count }}</div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card stat-card border-success p-3">
+      <div class="text-muted small mb-1">{{ _("Aktive Mitarbeiter") }}</div>
+      <div class="fs-2 fw-bold">{{ employee_count }}</div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card stat-card border-secondary p-3">
+      <div class="text-muted small mb-1">{{ _("Inaktive Mitarbeiter") }}</div>
+      <div class="fs-2 fw-bold">{{ inactive_count }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card p-4">
+      <h6 class="fw-semibold mb-3"><i class="bi bi-lightning-charge me-2 text-warning"></i>{{ _("Schnellzugriff") }}</h6>
+      <div class="d-grid gap-2">
+        <a href="{{ url_for('organization_new') }}" class="btn btn-outline-primary btn-sm text-start">
+          <i class="bi bi-plus-circle me-2"></i>{{ _("Neue Organisation anlegen") }}
+        </a>
+        <a href="{{ url_for('employee_new') }}" class="btn btn-outline-success btn-sm text-start">
+          <i class="bi bi-person-plus me-2"></i>{{ _("Neuen Mitarbeiter anlegen") }}
+        </a>
+        <a href="{{ url_for('employee_import') }}" class="btn btn-outline-secondary btn-sm text-start">
+          <i class="bi bi-upload me-2"></i>{{ _("Mitarbeiter per CSV importieren") }}
+        </a>
+        <a href="{{ url_for('deploy') }}" class="btn btn-outline-dark btn-sm text-start">
+          <i class="bi bi-download me-2"></i>{{ _("Jamf Script herunterladen") }}
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-4">
+      <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-info"></i>{{ _("Wie funktioniert es?") }}</h6>
+      <ol class="small text-muted ps-3 mb-0" style="line-height:2">
+        <li>{{ _("Organisationen mit Adresse, Logo und Texten anlegen") }}</li>
+        <li>{{ _("Mitarbeiter per CSV importieren oder einzeln erfassen") }}</li>
+        <li>{{ _("Signatur-Vorschau pro Mitarbeiter prüfen") }}</li>
+        <li>{{ _("Jamf Script herunterladen & als Policy deployen") }}</li>
+        <li>{{ _("Script erkennt den Account automatisch und schreibt die Signatur") }}</li>
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}

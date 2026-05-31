@@ -1,0 +1,15 @@
+services:
+  mailsign:
+    build: .
+    container_name: mailsign
+    restart: unless-stopped
+    ports:
+      - "5050:5050"
+    volumes:
+      # Bind Mounts: Daten liegen direkt im Projektverzeichnis
+      # → einfaches Backup (data/ = SQLite-DB, static/logos = hochgeladene Logos)
+      - ./data:/app/data
+      - ./static/logos:/app/static/logos
+    environment:
+      # SECRET_KEY wird aus der .env-Datei gelesen (siehe .env.example)
+      - SECRET_KEY=${SECRET_KEY}

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}{{ _("CSV Import") }} – Sig Manager{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center mb-4 gap-2">
+  <a href="{{ url_for('employees') }}" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <h4 class="fw-semibold mb-0">{{ _("CSV Import") }}</h4>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card p-4">
+      <form method="POST" enctype="multipart/form-data">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-medium">{{ _("CSV-Datei") }} *</label>
+            <div class="custom-file-input">
+              <input type="file" name="csv_file" id="csvInput" accept=".csv" class="d-none" required>
+              <label for="csvInput" class="btn btn-outline-secondary btn-sm mb-0">
+                <i class="bi bi-upload me-1"></i>{{ _("Datei auswählen") }}
+              </label>
+              <span class="ms-2 text-muted small" id="csvFileName">{{ _("Keine Datei ausgewählt") }}</span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label fw-medium">{{ _("Organisation zuweisen") }} *</label>
+            <select name="organization_id" class="form-select" required>
+              <option value="">{{ _("– Bitte wählen –") }}</option>
+              {% for p in organizations %}
+                <option value="{{ p.id }}">{{ p.name }}</option>
+              {% endfor %}
+            </select>
+            <div class="form-text">{{ _("Alle importierten Mitarbeiter werden dieser Organisation zugeordnet.") }}</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label fw-medium">{{ _("Trennzeichen") }}</label>
+            <select name="delimiter" class="form-select">
+              <option value=",">{{ _(", (Komma)") }}</option>
+              <option value=";">{{ _("; (Semikolon)") }}</option>
+              <option value="&#9;">{{ _("Tab") }}</option>
+            </select>
+          </div>
+
+          <div class="col-12 mt-2">
+            <div class="fw-medium mb-2 small text-muted text-uppercase" style="letter-spacing:.05em">
+              {{ _("Spalten-Zuordnung") }}
+            </div>
+            <div class="row g-2">
+              {% set cols = [
+                ('col_email',        _('E-Mail *'),    'email'),
+                ('col_title',        _('Titel/Grad'),  'title'),
+                ('col_first',        _('Vorname *'),   'first_name'),
+                ('col_last',         _('Nachname'),    'last_name'),
+                ('col_phone',        _('Telefon'),     'phone'),
+                ('col_availability', _('Anwesenheit'), 'availability'),
+              ] %}
+              {% for name, label, default in cols %}
+              <div class="col-sm-6">
+                <label class="form-label small">{{ label }}</label>
+                <input type="text" name="{{ name }}" class="form-control form-control-sm"
+                       value="{{ default }}" placeholder="{{ _('Spaltenname in CSV') }}">
+              </div>
+              {% endfor %}
+            </div>
+            <div class="form-text mt-1">
+              {{ _("Tragen Sie den genauen Spaltennamen aus der CSV-Kopfzeile ein.") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-upload me-1"></i>{{ _("Importieren") }}
+          </button>
+          <a href="{{ url_for('csv_template') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-download me-1"></i>{{ _("Vorlage herunterladen") }}
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card p-4 bg-light border-0">
+      <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2"></i>{{ _("Hinweise") }}</h6>
+      <ul class="small text-muted ps-3 mb-0" style="line-height:2">
+        <li>{{ _("Erste Zeile muss die Kopfzeile sein") }}</li>
+        <li>{{ _("Pflichtfelder: E-Mail, Vorname") }}</li>
+        <li>{{ _("Nachname und Anwesenheit sind optional") }}</li>
+        <li>{{ _("UTF-8 Kodierung empfohlen") }}</li>
+        <li>{{ _('Existierende E-Mail → Daten werden') }} <em>{{ _('aktualisiert') }}</em></li>
+        <li>{{ _('Neue E-Mail → Mitarbeiter wird') }} <em>{{ _('angelegt') }}</em></li>
+        <li>{{ _("Organisation kann nach dem Import pro Mitarbeiter geändert werden") }}</li>
+      </ul>
+      <div class="mt-3 p-3 bg-white rounded border small">
+        <div class="fw-medium mb-1">{{ _("Beispiel CSV") }}</div>
+        <code class="text-muted" style="font-size:.78rem">
+          email,title,first_name,last_name,phone,availability<br>
+          max.muster@beispiel.ch,,Max,Muster,+41 44 000 00 00,"Mo-Fr 08:00-17:00"<br>
+          erika.beispiel@beispiel.ch,,Erika,Beispiel,+41 44 000 00 01,
+        </code>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.getElementById('csvInput').addEventListener('change', function () {
+    var name = this.files && this.files.length ? this.files[0].name : '{{ _("Keine Datei ausgewählt") }}';
+    document.getElementById('csvFileName').textContent = name;
+  });
+</script>
+{% endblock %}

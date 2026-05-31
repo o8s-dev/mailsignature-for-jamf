@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Vorschau – {{ emp.first_name }} {{ emp.last_name }}{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center mb-4 gap-2">
+  <a href="{{ url_for('employees') }}" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <h4 class="fw-semibold mb-0">{{ _("Signatur-Vorschau") }}</h4>
+  <span class="text-muted">— {{ emp.title ~ ' ' if emp.title }}{{ emp.first_name }} {{ emp.last_name }}</span>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="fw-medium small text-muted text-uppercase" style="letter-spacing:.05em">
+          {{ _('Vorschau (gerendert)') }}
+        </span>
+        <a href="{{ url_for('employee_edit', eid=emp.id) }}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-pencil me-1"></i>{{ _("Bearbeiten") }}
+        </a>
+      </div>
+      <!-- Simulated email window -->
+      <div style="border:1px solid #e2e8f0; border-radius:8px; background:#fff;">
+        <div style="background:#f8f9fa; border-bottom:1px solid #e2e8f0; padding:10px 14px;
+                    border-radius:8px 8px 0 0; font-size:.8rem; color:#64748b;">
+          <div><strong>{{ _('Von:') }}</strong> {{ emp.email }}</div>
+          <div><strong>{{ _('Betreff:') }}</strong> {{ _('Muster-E-Mail') }}</div>
+        </div>
+        <div style="padding:16px 20px;">
+          <p style="color:#333; font-size:13px; margin-bottom:16px;">
+            {{ _('Sehr geehrte Damen und Herren,') }}<br><br>
+            {{ _('dies ist eine Beispiel-Nachricht zur Darstellung der Signatur.') }}
+          </p>
+          <hr style="border-color:#e2e8f0; margin:16px 0;">
+          <iframe sandbox
+                  srcdoc="{{ signature_html | e }}"
+                  style="width:100%; border:none; min-height:200px; display:block;"
+                  onload="this.style.height=this.contentDocument.documentElement.scrollHeight+32+'px'">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card p-4">
+      <div class="fw-medium small text-muted text-uppercase mb-3" style="letter-spacing:.05em">
+        {{ _("Mitarbeiterdaten") }}
+      </div>
+      <table class="table table-sm table-borderless mb-0 small">
+        <tr><td class="text-muted" style="width:110px">{{ _("E-Mail") }}</td><td>{{ emp.email }}</td></tr>
+        <tr><td class="text-muted">{{ _("Titel") }}</td><td>{{ emp.title or '–' }}</td></tr>
+        <tr><td class="text-muted">{{ _("Vorname") }}</td><td>{{ emp.first_name }}</td></tr>
+        <tr><td class="text-muted">{{ _("Nachname") }}</td><td>{{ emp.last_name }}</td></tr>
+        <tr><td class="text-muted">{{ _("Telefon") }}</td><td>{{ emp.phone or '(Organisation-Nummer)' }}</td></tr>
+        <tr><td class="text-muted">{{ _("Organisation") }}</td><td>{{ organization.name }}</td></tr>
+        <tr><td class="text-muted">{{ _("Signatur-UUID") }}</td>
+            <td class="font-monospace" style="font-size:.7rem; word-break:break-all">
+              {{ sig_uuid }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card p-4 mt-3 bg-light border-0">
+      <div class="fw-medium small mb-2"><i class="bi bi-info-circle me-1"></i>Deployment</div>
+      <p class="small text-muted mb-2">
+        {{ _("Diese Signatur wird auf dem Gerät unter folgendem Pfad geschrieben:") }}
+      </p>
+      <code class="small" style="font-size:.72rem; word-break:break-all">
+        ~/Library/Mail/V10/MailData/Signatures/<br>{{ sig_uuid }}.mailsignature
+      </code>
+    </div>
+  </div>
+</div>
+{% endblock %}
