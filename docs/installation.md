@@ -14,8 +14,8 @@ This guide sets up MailSign on a server with Docker and puts it behind HTTPS.
 ## 2. Get the code
 
 ```bash
-git clone https://github.com/o8s-dev/mailsign-for-jamf.git
-cd mailsign-for-jamf
+git clone https://github.com/o8s-dev/mailsignature-for-jamf.git
+cd mailsignature-for-jamf
 ```
 
 ## 3. Set the secret key

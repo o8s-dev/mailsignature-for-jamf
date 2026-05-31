@@ -15,8 +15,8 @@ Please **don't** include real personal data, API keys, or your `SECRET_KEY`.
 ## Local development
 
 ```bash
-git clone https://github.com/o8s-dev/mailsign-for-jamf.git
-cd mailsign-for-jamf
+git clone https://github.com/o8s-dev/mailsignature-for-jamf.git
+cd mailsignature-for-jamf
 
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt

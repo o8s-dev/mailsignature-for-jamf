@@ -83,8 +83,8 @@ from the email address, so updates replace cleanly instead of creating duplicate
 
 ```bash
 # 1. Clone
-git clone https://github.com/o8s-dev/mailsign-for-jamf.git
-cd mailsign-for-jamf
+git clone https://github.com/o8s-dev/mailsignature-for-jamf.git
+cd mailsignature-for-jamf
 
 # 2. Configure the secret key
 cp .env.example .env
