@@ -58,6 +58,7 @@
           <option value="logo" {{ 'selected' if cur == 'logo' else '' }}>{{ _("Mit Logo (Logo links, Text rechts)") }}</option>
           <option value="compact" {{ 'selected' if cur == 'compact' else '' }}>{{ _("Kompakt (wenige Zeilen)") }}</option>
           <option value="accent" {{ 'selected' if cur == 'accent' else '' }}>{{ _("Mit Akzentbalken (Firmenfarbe)") }}</option>
+          <option value="custom" {{ 'selected' if cur == 'custom' else '' }}>{{ _("Eigenes HTML (Platzhalter)") }}</option>
         </select>
         <div class="form-text">{{ _("Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation.") }}</div>
       </div>
@@ -66,6 +67,15 @@
         <input type="color" name="accent_color" class="form-control form-control-color"
                value="{{ organization.accent_color if organization and organization.accent_color else '#2563EB' }}">
         <div class="form-text">{{ _("Firmenfarbe für die Akzentbalken-Vorlage.") }}</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-medium">{{ _("Eigenes HTML") }}</label>
+        <textarea name="custom_html" class="form-control font-monospace" rows="8" spellcheck="false"
+                  placeholder="{% raw %}<table>...{{name}}...{{email}}...</table>{% endraw %}">{{ organization.custom_html if organization and organization.custom_html else '' }}</textarea>
+        <div class="form-text">
+          {{ _("Verfügbare Platzhalter (nur für die Eigenes-HTML-Vorlage):") }}
+          <code>{% raw %}{{name}} {{title}} {{first_name}} {{last_name}} {{email}} {{phone}} {{organization}} {{organization_phone}} {{address1}} {{address2}} {{availability}} {{custom_note}} {{disclaimer}} {{logo}}{% endraw %}</code>
+        </div>
       </div>
       <div class="col-12">
         <label class="form-label fw-medium">{{ _("Hinweistext") }}</label>

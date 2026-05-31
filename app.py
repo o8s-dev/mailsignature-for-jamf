@@ -18,6 +18,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
+from markupsafe import escape
 from flask_babel import Babel, gettext as _
 
 BASE_DIR = Path(__file__).parent
@@ -128,6 +129,7 @@ def init_db():
             disclaimer  TEXT,
             template    TEXT DEFAULT 'classic',
             accent_color TEXT,
+            custom_html TEXT,
             created_at  TEXT DEFAULT (datetime('now')),
             updated_at  TEXT DEFAULT (datetime('now'))
         );
@@ -181,6 +183,8 @@ def migrate_db():
             conn.execute("ALTER TABLE organizations ADD COLUMN template TEXT DEFAULT 'classic'")
         if "accent_color" not in org_cols:
             conn.execute("ALTER TABLE organizations ADD COLUMN accent_color TEXT")
+        if "custom_html" not in org_cols:
+            conn.execute("ALTER TABLE organizations ADD COLUMN custom_html TEXT")
 
         # Step 1: Add missing columns via ALTER TABLE
         for col, definition in [
@@ -268,10 +272,23 @@ SIGNATURE_TEMPLATES = {
 DEFAULT_SIGNATURE_TEMPLATE = "classic"
 DEFAULT_ACCENT_COLOR = "#2563EB"
 
+# "custom" = vom Power-User selbst geschriebenes HTML mit Platzhaltern.
+# Wird NICHT als Jinja gerendert (SSTI-Schutz), sondern per fester
+# Platzhalter-Ersetzung mit escapten Werten – siehe render_custom_html().
+CUSTOM_TEMPLATE = "custom"
+VALID_TEMPLATES = set(SIGNATURE_TEMPLATES) | {CUSTOM_TEMPLATE}
+
+# Verfügbare Platzhalter im „Eigenes HTML"-Modus (für UI-Hinweis & Doku).
+CUSTOM_PLACEHOLDERS = [
+    "name", "title", "first_name", "last_name", "email", "phone",
+    "organization", "organization_phone", "address1", "address2",
+    "availability", "custom_note", "disclaimer", "logo",
+]
+
 
 def normalize_template(name):
     """Gültigen Vorlagen-Schlüssel zurückgeben (Fallback: Standard)."""
-    return name if name in SIGNATURE_TEMPLATES else DEFAULT_SIGNATURE_TEMPLATE
+    return name if name in VALID_TEMPLATES else DEFAULT_SIGNATURE_TEMPLATE
 
 
 def normalize_color(value):
@@ -327,10 +344,16 @@ def build_signature_payload(emp, organization):
     except (IndexError, KeyError):
         accent_color = DEFAULT_ACCENT_COLOR
 
+    try:
+        custom_html = organization["custom_html"] or ""
+    except (IndexError, KeyError):
+        custom_html = ""
+
     return {
         "sig_uuid": sig_uuid_val,
         "template": template_name,
         "accent_color": accent_color,
+        "custom_html": custom_html,
         "sig_name": sig_name,
         "title": emp["title"] or "",
         "first_name": emp["first_name"],
@@ -348,7 +371,48 @@ def build_signature_payload(emp, organization):
     }
 
 
+def render_custom_html(payload):
+    """Eigenes HTML des Power-Users mit Platzhaltern füllen.
+
+    Sicher: KEIN Jinja auf User-Input (kein SSTI). Feste Platzhalter werden per
+    str.replace ersetzt, eingesetzte Werte werden HTML-escaped (kein XML/HTML aus
+    Mitarbeiterdaten). `{{logo}}` ist ein von uns erzeugtes <img>-Tag.
+    """
+    name = " ".join(
+        p for p in [payload.get("title", ""), payload.get("first_name", ""),
+                    payload.get("last_name", "")] if p
+    ).strip()
+    logo_b64 = payload.get("logo_b64")
+    logo_tag = (
+        f'<img src="{logo_b64}" alt="{escape(payload.get("organization_name", ""))}" '
+        f'style="max-height:70px; max-width:280px; border:0;">'
+    ) if logo_b64 else ""
+
+    values = {
+        "name": name,
+        "title": payload.get("title", ""),
+        "first_name": payload.get("first_name", ""),
+        "last_name": payload.get("last_name", ""),
+        "email": payload.get("email", ""),
+        "phone": payload.get("phone", "") or payload.get("organization_phone", ""),
+        "organization": payload.get("organization_name", ""),
+        "organization_phone": payload.get("organization_phone", ""),
+        "address1": payload.get("address1", ""),
+        "address2": payload.get("address2", ""),
+        "availability": payload.get("availability", ""),
+        "custom_note": payload.get("custom_note", ""),
+        "disclaimer": payload.get("disclaimer", ""),
+    }
+    out = payload.get("custom_html") or ""
+    for key, val in values.items():
+        out = out.replace("{{" + key + "}}", str(escape(val)))
+    out = out.replace("{{logo}}", logo_tag)
+    return out
+
+
 def render_signature_html(payload):
+    if payload.get("template") == CUSTOM_TEMPLATE:
+        return render_custom_html(payload)
     template_file = SIGNATURE_TEMPLATES.get(
         payload.get("template"), SIGNATURE_TEMPLATES[DEFAULT_SIGNATURE_TEMPLATE]
     )
@@ -656,8 +720,8 @@ def organization_new():
 
         with get_db() as conn:
             conn.execute("""
-                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template, accent_color)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template, accent_color, custom_html)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (name,
                   request.form.get("address1", "").strip(),
                   request.form.get("address2", "").strip(),
@@ -666,7 +730,8 @@ def organization_new():
                   request.form.get("custom_note", "").strip() or DEFAULT_CUSTOM_NOTE,
                   request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
                   normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
-                  normalize_color(request.form.get("accent_color"))))
+                  normalize_color(request.form.get("accent_color")),
+                  request.form.get("custom_html", "").strip()))
         flash(_("Organisation «%(name)s» erstellt.", name=name), "success")
         return redirect(url_for("organizations"))
     return render_template("organization_form.html", organization=None,
@@ -702,7 +767,7 @@ def organization_edit(oid):
 
             conn.execute("""
                 UPDATE organizations SET name=?, address1=?, address2=?, phone=?,
-                logo=?, custom_note=?, disclaimer=?, template=?, accent_color=?, updated_at=datetime('now')
+                logo=?, custom_note=?, disclaimer=?, template=?, accent_color=?, custom_html=?, updated_at=datetime('now')
                 WHERE id=?
             """, (name,
                   request.form.get("address1", "").strip(),
@@ -713,6 +778,7 @@ def organization_edit(oid):
                   request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
                   normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
                   normalize_color(request.form.get("accent_color")),
+                  request.form.get("custom_html", "").strip(),
                   oid))
             flash(_("Organisation «%(name)s» gespeichert.", name=name), "success")
             return redirect(url_for("organizations"))

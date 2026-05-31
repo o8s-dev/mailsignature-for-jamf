@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-31 14:43+0200\n"
+"POT-Creation-Date: 2026-05-31 14:52+0200\n"
 "PO-Revision-Date: 2026-05-31 05:50+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,95 +18,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app.py:468
+#: app.py:532
 msgid "Erster Administrator-Account erstellt."
 msgstr "First administrator account created."
 
-#: app.py:487
+#: app.py:551
 msgid "Benutzername oder Passwort falsch."
 msgstr "Incorrect username or password."
 
-#: app.py:544
+#: app.py:608
 msgid "Benutzername und Passwort sind Pflichtfelder."
 msgstr "Username and password are required."
 
-#: app.py:552
+#: app.py:616
 #, python-format
 msgid "Benutzer '%(name)s' erstellt."
 msgstr "User '%(name)s' created."
 
-#: app.py:555
+#: app.py:619
 msgid "Benutzername bereits vergeben."
 msgstr "Username already taken."
 
-#: app.py:582
+#: app.py:646
 msgid "Benutzer aktualisiert."
 msgstr "User updated."
 
-#: app.py:593
+#: app.py:657
 msgid "Du kannst deinen eigenen Account nicht löschen."
 msgstr "You cannot delete your own account."
 
-#: app.py:598
+#: app.py:662
 msgid "Der letzte Benutzer kann nicht gelöscht werden."
 msgstr "The last user cannot be deleted."
 
-#: app.py:601
+#: app.py:665
 msgid "Benutzer gelöscht."
 msgstr "User deleted."
 
-#: app.py:645 app.py:687
+#: app.py:709 app.py:752
 msgid "Name der Organisation ist erforderlich."
 msgstr "Organization name is required."
 
-#: app.py:670
+#: app.py:735
 #, python-format
 msgid "Organisation «%(name)s» erstellt."
 msgstr "Organization \"%(name)s\" created."
 
-#: app.py:717
+#: app.py:783
 #, python-format
 msgid "Organisation «%(name)s» gespeichert."
 msgstr "Organization \"%(name)s\" saved."
 
-#: app.py:736
+#: app.py:802
 #, python-format
 msgid "Organisation «%(name)s» gelöscht."
 msgstr "Organization \"%(name)s\" deleted."
 
-#: app.py:799 app.py:835
+#: app.py:865 app.py:901
 msgid "E-Mail, Vorname und Organisation sind Pflichtfelder."
 msgstr "Email, first name and organization are required."
 
-#: app.py:815
+#: app.py:881
 #, python-format
 msgid "%(name)s wurde angelegt."
 msgstr "%(name)s has been created."
 
-#: app.py:851
+#: app.py:917
 #, python-format
 msgid "%(name)s gespeichert."
 msgstr "%(name)s saved."
 
-#: app.py:865
+#: app.py:931
 #, python-format
 msgid "%(name)s gelöscht."
 msgstr "%(name)s deleted."
 
-#: app.py:883
+#: app.py:949
 msgid "Bitte eine Organisation auswählen."
 msgstr "Please select an organization."
 
-#: app.py:886
+#: app.py:952
 msgid "Bitte eine CSV-Datei hochladen."
 msgstr "Please upload a CSV file."
 
-#: app.py:945
+#: app.py:1011
 #, python-format
 msgid "Import abgeschlossen: %(a)s neu, %(u)s aktualisiert, %(s)s übersprungen."
 msgstr "Import complete: %(a)s added, %(u)s updated, %(s)s skipped."
 
-#: app.py:1080
+#: app.py:1146
 msgid ""
 "API-Key wurde neu generiert. Bitte das Jamf-Script erneut herunterladen "
 "und in Jamf aktualisieren."
@@ -114,7 +114,7 @@ msgstr ""
 "API key regenerated. Please download the Jamf script again and update it "
 "in Jamf."
 
-#: app.py:1090
+#: app.py:1156
 msgid ""
 "Achtung: Das Script enthält 'localhost' als Server-URL. Öffnen Sie das "
 "Web-Tool über die echte IP-Adresse des Servers (z.B. "
@@ -253,7 +253,7 @@ msgid "Unter"
 msgstr "Under"
 
 #: templates/deploy.html:51 templates/employee_form.html:83
-#: templates/organization_form.html:83 templates/user_form.html:41
+#: templates/organization_form.html:93 templates/user_form.html:41
 msgid "Speichern"
 msgstr "Save"
 
@@ -457,7 +457,7 @@ msgid "Vorschau"
 msgstr "Preview"
 
 #: templates/employee_form.html:91 templates/employees.html:129
-#: templates/organization_form.html:85 templates/organizations.html:75
+#: templates/organization_form.html:95 templates/organizations.html:75
 #: templates/user_form.html:43
 msgid "Abbrechen"
 msgstr "Cancel"
@@ -537,7 +537,7 @@ msgid "Datei auswählen"
 msgstr "Choose file"
 
 #: templates/import.html:23 templates/import.html:111
-#: templates/organization_form.html:48 templates/organization_form.html:93
+#: templates/organization_form.html:48 templates/organization_form.html:103
 msgid "Keine Datei ausgewählt"
 msgstr "No file selected"
 
@@ -795,28 +795,40 @@ msgstr "Compact (few lines)"
 msgid "Mit Akzentbalken (Firmenfarbe)"
 msgstr "With accent bar (brand color)"
 
-#: templates/organization_form.html:62
-msgid "Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation."
-msgstr ""
+#: templates/organization_form.html:61
+msgid "Eigenes HTML (Platzhalter)"
+msgstr "Custom HTML (placeholders)"
 
-#: templates/organization_form.html:65
+#: templates/organization_form.html:63
+msgid "Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation."
+msgstr "Signature layout — applies to all members of this organization."
+
+#: templates/organization_form.html:66
 msgid "Akzentfarbe"
 msgstr "Accent color"
 
-#: templates/organization_form.html:68
+#: templates/organization_form.html:69
 msgid "Firmenfarbe für die Akzentbalken-Vorlage."
 msgstr "Brand color for the accent-bar template."
 
-#: templates/organization_form.html:71
+#: templates/organization_form.html:72
+msgid "Eigenes HTML"
+msgstr "Custom HTML"
+
+#: templates/organization_form.html:76
+msgid "Verfügbare Platzhalter (nur für die Eigenes-HTML-Vorlage):"
+msgstr "Available placeholders (only for the custom HTML template):"
+
+#: templates/organization_form.html:81
 #, fuzzy
 msgid "Hinweistext"
 msgstr "Notes"
 
-#: templates/organization_form.html:73
+#: templates/organization_form.html:83
 msgid "Wird direkt unterhalb des Logos in der Signatur angezeigt."
 msgstr ""
 
-#: templates/organization_form.html:78
+#: templates/organization_form.html:88
 msgid "Kleiner Text am Ende der Signatur (DE + EN)."
 msgstr ""
 
