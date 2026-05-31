@@ -28,7 +28,7 @@ Python / Flask, SQLite (zero-config, file-based), served by gunicorn, packaged w
 
 ```bash
 # 1. Clone
-git clone https://git.macops.ch/Administrator/mailsign-for-jamf.git
+git clone https://git.o8s.ch/Administrator/mailsign-for-jamf.git
 cd mailsign-for-jamf
 
 # 2. Configure the secret key
