@@ -716,9 +716,8 @@ msgid "Anmelden"
 msgstr "Anmelden"
 
 #: templates/organization_form.html:2 templates/organization_form.html:8
-#, fuzzy
 msgid "Organisation bearbeiten"
-msgstr "Organisation zuweisen"
+msgstr "Organisation bearbeiten"
 
 #: templates/organization_form.html:2 templates/organization_form.html:8
 #: templates/organizations.html:7
@@ -726,36 +725,32 @@ msgid "Neue Organisation"
 msgstr "Neue Organisation"
 
 #: templates/organization_form.html:15
-#, fuzzy
 msgid "Name der Organisation"
-msgstr "Neue Organisation"
+msgstr "Name der Organisation"
 
 #: templates/organization_form.html:20
-#, fuzzy
 msgid "Adresszeile 1"
-msgstr "Adresse"
+msgstr "Adresszeile 1"
 
 #: templates/organization_form.html:21
 msgid "z.B. Musterstrasse 1"
-msgstr ""
+msgstr "z.B. Musterstrasse 1"
 
 #: templates/organization_form.html:25
-#, fuzzy
 msgid "Adresszeile 2"
-msgstr "Adresse"
+msgstr "Adresszeile 2"
 
 #: templates/organization_form.html:26
 msgid "z.B. 8000 Zürich"
-msgstr ""
+msgstr "z.B. 8000 Zürich"
 
 #: templates/organization_form.html:30
-#, fuzzy
 msgid "Telefon (Organisation)"
-msgstr "Alle Organisationen"
+msgstr "Telefon (Organisation)"
 
 #: templates/organization_form.html:31
 msgid "z.B. +41 44 000 00 00"
-msgstr ""
+msgstr "z.B. +41 44 000 00 00"
 
 #: templates/organization_form.html:35 templates/organizations.html:20
 msgid "Logo"
@@ -763,11 +758,11 @@ msgstr "Logo"
 
 #: templates/organization_form.html:40
 msgid "Neues Logo hochladen um zu ersetzen"
-msgstr ""
+msgstr "Neues Logo hochladen um zu ersetzen"
 
 #: templates/organization_form.html:50
 msgid "PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px"
-msgstr ""
+msgstr "PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px"
 
 #: templates/organization_form.html:53
 msgid "Signatur-Vorlage"
@@ -818,17 +813,16 @@ msgid "Verfügbare Platzhalter (nur für die Eigenes-HTML-Vorlage):"
 msgstr "Verfügbare Platzhalter (nur für die Eigenes-HTML-Vorlage):"
 
 #: templates/organization_form.html:81
-#, fuzzy
 msgid "Hinweistext"
-msgstr "Hinweise"
+msgstr "Hinweistext"
 
 #: templates/organization_form.html:83
 msgid "Wird direkt unterhalb des Logos in der Signatur angezeigt."
-msgstr ""
+msgstr "Wird direkt unterhalb des Logos in der Signatur angezeigt."
 
 #: templates/organization_form.html:88
 msgid "Kleiner Text am Ende der Signatur (DE + EN)."
-msgstr ""
+msgstr "Kleiner Text am Ende der Signatur (DE + EN)."
 
 #: templates/organizations.html:17
 msgid "Adresse"
