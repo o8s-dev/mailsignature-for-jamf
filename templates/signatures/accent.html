@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body style="margin:0; padding:0;">
+{%- set ff   = 'Helvetica Neue, Helvetica, Arial, sans-serif' -%}
+{%- set base = 'font-family:' ~ ff ~ '; font-size:12px; color:#000000; line-height:1.5; margin:0; padding:0;' -%}
+{%- set sm   = 'font-family:' ~ ff ~ '; font-size:9px;  line-height:1.4; margin:0; padding:0;' -%}
+{%- set accent = accent_color or '#2563EB' -%}
+<table cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
+  <tr>
+    <td style="background-color:{{ accent }}; width:4px; font-size:0; line-height:0;">&nbsp;</td>
+    <td style="padding-left:14px; font-family:{{ ff }}; font-size:12px; color:#000000; line-height:1.5;">
+
+      <div style="{{ base }}">Freundliche Grüsse</div>
+      <div style="{{ base }} margin-top:6px;">
+        <strong style="color:{{ accent }};">{% if title %}{{ title }} {% endif %}{{ first_name }}{% if last_name %} {{ last_name }}{% endif %}</strong>
+      </div>
+
+      <div style="{{ base }} margin-top:10px;">{{ organization_name }}</div>
+      <div style="{{ base }}">{{ address1 }}{% if address2 %}<br>{{ address2 }}{% endif %}</div>
+
+      <div style="{{ base }} margin-top:10px;">
+        Tel.: {% if phone %}{{ phone }}{% else %}{{ organization_phone }}{% endif %}<br>
+        Mail: <a href="mailto:{{ email }}" style="color:{{ accent }}; text-decoration:none;">{{ email }}</a>
+      </div>
+
+      {% if availability %}
+      <div style="{{ base }} margin-top:10px;">Anwesenheit: {{ availability }}</div>
+      {% endif %}
+
+      {% if logo_b64 %}
+      <div style="margin-top:10px; margin-bottom:2px;">
+        <img src="{{ logo_b64 }}" alt="{{ organization_name }}"
+             style="max-height:70px; max-width:280px; display:block; border:0;">
+      </div>
+      {% endif %}
+
+      <hr style="border:none; border-top:2px solid {{ accent }}; margin:12px 0 10px 0;">
+
+      <div style="{{ sm }} color:#000000; margin-bottom:6px; white-space:pre-wrap;">{{ custom_note }}</div>
+      <div style="{{ sm }} color:#000000; margin-top:6px; white-space:pre-wrap;">{{ disclaimer }}</div>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>

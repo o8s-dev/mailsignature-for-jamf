@@ -127,6 +127,7 @@ def init_db():
             custom_note TEXT,
             disclaimer  TEXT,
             template    TEXT DEFAULT 'classic',
+            accent_color TEXT,
             created_at  TEXT DEFAULT (datetime('now')),
             updated_at  TEXT DEFAULT (datetime('now'))
         );
@@ -178,6 +179,8 @@ def migrate_db():
         org_cols = {c["name"] for c in conn.execute("PRAGMA table_info(organizations)").fetchall()}
         if "template" not in org_cols:
             conn.execute("ALTER TABLE organizations ADD COLUMN template TEXT DEFAULT 'classic'")
+        if "accent_color" not in org_cols:
+            conn.execute("ALTER TABLE organizations ADD COLUMN accent_color TEXT")
 
         # Step 1: Add missing columns via ALTER TABLE
         for col, definition in [
@@ -260,13 +263,23 @@ SIGNATURE_TEMPLATES = {
     "minimal": "signatures/minimal.html",
     "logo":    "signatures/logo.html",
     "compact": "signatures/compact.html",
+    "accent":  "signatures/accent.html",
 }
 DEFAULT_SIGNATURE_TEMPLATE = "classic"
+DEFAULT_ACCENT_COLOR = "#2563EB"
 
 
 def normalize_template(name):
     """Gültigen Vorlagen-Schlüssel zurückgeben (Fallback: Standard)."""
     return name if name in SIGNATURE_TEMPLATES else DEFAULT_SIGNATURE_TEMPLATE
+
+
+def normalize_color(value):
+    """Hex-Farbe (#RRGGBB) validieren, sonst None — schützt vor CSS-Injection."""
+    v = (value or "").strip()
+    if len(v) == 7 and v[0] == "#" and all(c in "0123456789abcdefABCDEF" for c in v[1:]):
+        return v
+    return None
 
 
 def build_signature_payload(emp, organization):
@@ -309,9 +322,15 @@ def build_signature_payload(emp, organization):
     except (IndexError, KeyError):
         template_name = DEFAULT_SIGNATURE_TEMPLATE
 
+    try:
+        accent_color = normalize_color(organization["accent_color"]) or DEFAULT_ACCENT_COLOR
+    except (IndexError, KeyError):
+        accent_color = DEFAULT_ACCENT_COLOR
+
     return {
         "sig_uuid": sig_uuid_val,
         "template": template_name,
+        "accent_color": accent_color,
         "sig_name": sig_name,
         "title": emp["title"] or "",
         "first_name": emp["first_name"],
@@ -637,8 +656,8 @@ def organization_new():
 
         with get_db() as conn:
             conn.execute("""
-                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template, accent_color)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (name,
                   request.form.get("address1", "").strip(),
                   request.form.get("address2", "").strip(),
@@ -646,7 +665,8 @@ def organization_new():
                   logo,
                   request.form.get("custom_note", "").strip() or DEFAULT_CUSTOM_NOTE,
                   request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
-                  normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE))))
+                  normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
+                  normalize_color(request.form.get("accent_color"))))
         flash(_("Organisation «%(name)s» erstellt.", name=name), "success")
         return redirect(url_for("organizations"))
     return render_template("organization_form.html", organization=None,
@@ -682,7 +702,7 @@ def organization_edit(oid):
 
             conn.execute("""
                 UPDATE organizations SET name=?, address1=?, address2=?, phone=?,
-                logo=?, custom_note=?, disclaimer=?, template=?, updated_at=datetime('now')
+                logo=?, custom_note=?, disclaimer=?, template=?, accent_color=?, updated_at=datetime('now')
                 WHERE id=?
             """, (name,
                   request.form.get("address1", "").strip(),
@@ -692,6 +712,7 @@ def organization_edit(oid):
                   request.form.get("custom_note", "").strip() or DEFAULT_CUSTOM_NOTE,
                   request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
                   normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
+                  normalize_color(request.form.get("accent_color")),
                   oid))
             flash(_("Organisation «%(name)s» gespeichert.", name=name), "success")
             return redirect(url_for("organizations"))

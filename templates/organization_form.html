@@ -57,8 +57,15 @@
           <option value="minimal" {{ 'selected' if cur == 'minimal' else '' }}>{{ _("Minimal (nur Text)") }}</option>
           <option value="logo" {{ 'selected' if cur == 'logo' else '' }}>{{ _("Mit Logo (Logo links, Text rechts)") }}</option>
           <option value="compact" {{ 'selected' if cur == 'compact' else '' }}>{{ _("Kompakt (wenige Zeilen)") }}</option>
+          <option value="accent" {{ 'selected' if cur == 'accent' else '' }}>{{ _("Mit Akzentbalken (Firmenfarbe)") }}</option>
         </select>
         <div class="form-text">{{ _("Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation.") }}</div>
+      </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-medium">{{ _("Akzentfarbe") }}</label>
+        <input type="color" name="accent_color" class="form-control form-control-color"
+               value="{{ organization.accent_color if organization and organization.accent_color else '#2563EB' }}">
+        <div class="form-text">{{ _("Firmenfarbe für die Akzentbalken-Vorlage.") }}</div>
       </div>
       <div class="col-12">
         <label class="form-label fw-medium">{{ _("Hinweistext") }}</label>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-31 14:24+0200\n"
+"POT-Creation-Date: 2026-05-31 14:43+0200\n"
 "PO-Revision-Date: 2026-05-31 05:50+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,95 +18,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app.py:449
+#: app.py:468
 msgid "Erster Administrator-Account erstellt."
 msgstr "First administrator account created."
 
-#: app.py:468
+#: app.py:487
 msgid "Benutzername oder Passwort falsch."
 msgstr "Incorrect username or password."
 
-#: app.py:525
+#: app.py:544
 msgid "Benutzername und Passwort sind Pflichtfelder."
 msgstr "Username and password are required."
 
-#: app.py:533
+#: app.py:552
 #, python-format
 msgid "Benutzer '%(name)s' erstellt."
 msgstr "User '%(name)s' created."
 
-#: app.py:536
+#: app.py:555
 msgid "Benutzername bereits vergeben."
 msgstr "Username already taken."
 
-#: app.py:563
+#: app.py:582
 msgid "Benutzer aktualisiert."
 msgstr "User updated."
 
-#: app.py:574
+#: app.py:593
 msgid "Du kannst deinen eigenen Account nicht löschen."
 msgstr "You cannot delete your own account."
 
-#: app.py:579
+#: app.py:598
 msgid "Der letzte Benutzer kann nicht gelöscht werden."
 msgstr "The last user cannot be deleted."
 
-#: app.py:582
+#: app.py:601
 msgid "Benutzer gelöscht."
 msgstr "User deleted."
 
-#: app.py:626 app.py:667
+#: app.py:645 app.py:687
 msgid "Name der Organisation ist erforderlich."
 msgstr "Organization name is required."
 
-#: app.py:650
+#: app.py:670
 #, python-format
 msgid "Organisation «%(name)s» erstellt."
 msgstr "Organization \"%(name)s\" created."
 
-#: app.py:696
+#: app.py:717
 #, python-format
 msgid "Organisation «%(name)s» gespeichert."
 msgstr "Organization \"%(name)s\" saved."
 
-#: app.py:715
+#: app.py:736
 #, python-format
 msgid "Organisation «%(name)s» gelöscht."
 msgstr "Organization \"%(name)s\" deleted."
 
-#: app.py:778 app.py:814
+#: app.py:799 app.py:835
 msgid "E-Mail, Vorname und Organisation sind Pflichtfelder."
 msgstr "Email, first name and organization are required."
 
-#: app.py:794
+#: app.py:815
 #, python-format
 msgid "%(name)s wurde angelegt."
 msgstr "%(name)s has been created."
 
-#: app.py:830
+#: app.py:851
 #, python-format
 msgid "%(name)s gespeichert."
 msgstr "%(name)s saved."
 
-#: app.py:844
+#: app.py:865
 #, python-format
 msgid "%(name)s gelöscht."
 msgstr "%(name)s deleted."
 
-#: app.py:862
+#: app.py:883
 msgid "Bitte eine Organisation auswählen."
 msgstr "Please select an organization."
 
-#: app.py:865
+#: app.py:886
 msgid "Bitte eine CSV-Datei hochladen."
 msgstr "Please upload a CSV file."
 
-#: app.py:924
+#: app.py:945
 #, python-format
 msgid "Import abgeschlossen: %(a)s neu, %(u)s aktualisiert, %(s)s übersprungen."
 msgstr "Import complete: %(a)s added, %(u)s updated, %(s)s skipped."
 
-#: app.py:1059
+#: app.py:1080
 msgid ""
 "API-Key wurde neu generiert. Bitte das Jamf-Script erneut herunterladen "
 "und in Jamf aktualisieren."
@@ -114,7 +114,7 @@ msgstr ""
 "API key regenerated. Please download the Jamf script again and update it "
 "in Jamf."
 
-#: app.py:1069
+#: app.py:1090
 msgid ""
 "Achtung: Das Script enthält 'localhost' als Server-URL. Öffnen Sie das "
 "Web-Tool über die echte IP-Adresse des Servers (z.B. "
@@ -253,7 +253,7 @@ msgid "Unter"
 msgstr "Under"
 
 #: templates/deploy.html:51 templates/employee_form.html:83
-#: templates/organization_form.html:76 templates/user_form.html:41
+#: templates/organization_form.html:83 templates/user_form.html:41
 msgid "Speichern"
 msgstr "Save"
 
@@ -457,7 +457,7 @@ msgid "Vorschau"
 msgstr "Preview"
 
 #: templates/employee_form.html:91 templates/employees.html:129
-#: templates/organization_form.html:78 templates/organizations.html:75
+#: templates/organization_form.html:85 templates/organizations.html:75
 #: templates/user_form.html:43
 msgid "Abbrechen"
 msgstr "Cancel"
@@ -537,7 +537,7 @@ msgid "Datei auswählen"
 msgstr "Choose file"
 
 #: templates/import.html:23 templates/import.html:111
-#: templates/organization_form.html:48 templates/organization_form.html:86
+#: templates/organization_form.html:48 templates/organization_form.html:93
 msgid "Keine Datei ausgewählt"
 msgstr "No file selected"
 
@@ -718,8 +718,9 @@ msgid "Anmelden"
 msgstr "Sign in"
 
 #: templates/organization_form.html:2 templates/organization_form.html:8
+#, fuzzy
 msgid "Organisation bearbeiten"
-msgstr "Edit organization"
+msgstr "Assign organization"
 
 #: templates/organization_form.html:2 templates/organization_form.html:8
 #: templates/organizations.html:7
@@ -727,32 +728,36 @@ msgid "Neue Organisation"
 msgstr "New organization"
 
 #: templates/organization_form.html:15
+#, fuzzy
 msgid "Name der Organisation"
-msgstr "Organization name"
+msgstr "New organization"
 
 #: templates/organization_form.html:20
+#, fuzzy
 msgid "Adresszeile 1"
-msgstr "Address line 1"
+msgstr "Address"
 
 #: templates/organization_form.html:21
 msgid "z.B. Musterstrasse 1"
-msgstr "e.g. 1 Example Street"
+msgstr ""
 
 #: templates/organization_form.html:25
+#, fuzzy
 msgid "Adresszeile 2"
-msgstr "Address line 2"
+msgstr "Address"
 
 #: templates/organization_form.html:26
 msgid "z.B. 8000 Zürich"
-msgstr "e.g. 12345 Example City"
+msgstr ""
 
 #: templates/organization_form.html:30
+#, fuzzy
 msgid "Telefon (Organisation)"
-msgstr "Phone (organization)"
+msgstr "All organizations"
 
 #: templates/organization_form.html:31
 msgid "z.B. +41 44 000 00 00"
-msgstr "e.g. +1 555 000 0000"
+msgstr ""
 
 #: templates/organization_form.html:35 templates/organizations.html:20
 msgid "Logo"
@@ -760,11 +765,11 @@ msgstr "Logo"
 
 #: templates/organization_form.html:40
 msgid "Neues Logo hochladen um zu ersetzen"
-msgstr "Upload a new logo to replace"
+msgstr ""
 
 #: templates/organization_form.html:50
 msgid "PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px"
-msgstr "PNG, JPG, SVG or TIFF. Recommended: max. 400×100 px"
+msgstr ""
 
 #: templates/organization_form.html:53
 msgid "Signatur-Vorlage"
@@ -786,21 +791,34 @@ msgstr "With logo (logo left, text right)"
 msgid "Kompakt (wenige Zeilen)"
 msgstr "Compact (few lines)"
 
-#: templates/organization_form.html:61
+#: templates/organization_form.html:60
+msgid "Mit Akzentbalken (Firmenfarbe)"
+msgstr "With accent bar (brand color)"
+
+#: templates/organization_form.html:62
 msgid "Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation."
-msgstr "Signature layout — applies to all members of this organization."
+msgstr ""
 
-#: templates/organization_form.html:64
-msgid "Hinweistext"
-msgstr "Custom note"
+#: templates/organization_form.html:65
+msgid "Akzentfarbe"
+msgstr "Accent color"
 
-#: templates/organization_form.html:66
-msgid "Wird direkt unterhalb des Logos in der Signatur angezeigt."
-msgstr "Shown directly below the logo in the signature."
+#: templates/organization_form.html:68
+msgid "Firmenfarbe für die Akzentbalken-Vorlage."
+msgstr "Brand color for the accent-bar template."
 
 #: templates/organization_form.html:71
+#, fuzzy
+msgid "Hinweistext"
+msgstr "Notes"
+
+#: templates/organization_form.html:73
+msgid "Wird direkt unterhalb des Logos in der Signatur angezeigt."
+msgstr ""
+
+#: templates/organization_form.html:78
 msgid "Kleiner Text am Ende der Signatur (DE + EN)."
-msgstr "Small text at the end of the signature (DE + EN)."
+msgstr ""
 
 #: templates/organizations.html:17
 msgid "Adresse"
@@ -894,4 +912,61 @@ msgstr "Created"
 #: templates/users.html:28
 msgid "Ich"
 msgstr "Me"
+
+#~ msgid "Organisation bearbeiten"
+#~ msgstr "Edit organization"
+
+#~ msgid "Name der Organisation"
+#~ msgstr "Organization name"
+
+#~ msgid "Adresszeile 1"
+#~ msgstr "Address line 1"
+
+#~ msgid "z.B. Musterstrasse 1"
+#~ msgstr "e.g. 1 Example Street"
+
+#~ msgid "Adresszeile 2"
+#~ msgstr "Address line 2"
+
+#~ msgid "z.B. 8000 Zürich"
+#~ msgstr "e.g. 12345 Example City"
+
+#~ msgid "Telefon (Organisation)"
+#~ msgstr "Phone (organization)"
+
+#~ msgid "z.B. +41 44 000 00 00"
+#~ msgstr "e.g. +1 555 000 0000"
+
+#~ msgid "Neues Logo hochladen um zu ersetzen"
+#~ msgstr "Upload a new logo to replace"
+
+#~ msgid "PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px"
+#~ msgstr "PNG, JPG, SVG or TIFF. Recommended: max. 400×100 px"
+
+#~ msgid "Signatur-Vorlage"
+#~ msgstr "Signature template"
+
+#~ msgid "Klassisch (Standard)"
+#~ msgstr "Classic (default)"
+
+#~ msgid "Minimal (nur Text)"
+#~ msgstr "Minimal (text only)"
+
+#~ msgid "Mit Logo (Logo links, Text rechts)"
+#~ msgstr "With logo (logo left, text right)"
+
+#~ msgid "Kompakt (wenige Zeilen)"
+#~ msgstr "Compact (few lines)"
+
+#~ msgid "Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation."
+#~ msgstr "Signature layout — applies to all members of this organization."
+
+#~ msgid "Hinweistext"
+#~ msgstr "Custom note"
+
+#~ msgid "Wird direkt unterhalb des Logos in der Signatur angezeigt."
+#~ msgstr "Shown directly below the logo in the signature."
+
+#~ msgid "Kleiner Text am Ende der Signatur (DE + EN)."
+#~ msgstr "Small text at the end of the signature (DE + EN)."
 
