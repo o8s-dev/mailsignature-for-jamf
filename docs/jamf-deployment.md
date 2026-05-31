@@ -13,7 +13,7 @@ afterwards you only change data in the web app.
 
 In the web app, open **Deploy**. Download both:
 
-1. **PPPC profile** — `SigManager-MailAutomation-PPPC.mobileconfig`
+1. **PPPC profile** — `MailSign-MailAutomation-PPPC.mobileconfig`
    Grants the deploy script permission to control Apple Mail via AppleScript. Without it,
    the script can't find the mail accounts.
 2. **Deploy script** — `deploy_signatures.sh`
@@ -22,7 +22,7 @@ In the web app, open **Deploy**. Download both:
 ## 2. Upload the PPPC profile (configuration profile)
 
 1. Jamf Pro → **Computers → Configuration Profiles → Upload**.
-2. Upload `SigManager-MailAutomation-PPPC.mobileconfig`.
+2. Upload `MailSign-MailAutomation-PPPC.mobileconfig`.
 3. Set the **scope** to all target devices → **Save**.
 
 Deploy this profile *before* (or together with) the script so permissions are in place

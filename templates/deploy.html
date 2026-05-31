@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ _("Jamf Deployment") }} – Sig Manager{% endblock %}
+{% block title %}{{ _("Jamf Deployment") }} – MailSign{% endblock %}
 {% block content %}
 <h4 class="fw-semibold mb-4">{{ _("Jamf Deployment") }}</h4>
 
@@ -30,7 +30,7 @@
         {{ _('Damit das Script Apple Mail per AppleScript steuern darf, muss dieses Konfigurationsprofil auf alle Geräte deployed werden. Ohne dieses Profil findet das Script keine Mail-Accounts.') }}
       </p>
       <a href="{{ url_for('deploy_pppc') }}" class="btn btn-warning btn-sm">
-        <i class="bi bi-download me-1"></i>{{ _("SigManager-MailAutomation-PPPC.mobileconfig herunterladen") }}
+        <i class="bi bi-download me-1"></i>{{ _("MailSign-MailAutomation-PPPC.mobileconfig herunterladen") }}
       </a>
       <div class="mt-3 small text-muted">
         {{ _('In Jamf:') }} <strong>Computers → Configuration Profiles → Upload</strong> → {{ _('Scope auf alle Geräte setzen → Speichern') }}
@@ -78,7 +78,7 @@
         {{ _("Bei Änderungen (neuer Mitarbeiter, Logo-Update, Textänderung):") }}
       </p>
       <ol class="small text-muted ps-3 mb-0" style="line-height:2.2">
-        <li>{{ _("Daten im Sig Manager anpassen") }}</li>
+        <li>{{ _("Daten in MailSign anpassen") }}</li>
         <li>{{ _('Policy in Jamf manuell auslösen') }} <em>{{ _('oder') }}</em> {{ _('beim nächsten Login automatisch') }}</li>
         <li>{{ _("Das Script holt sich stets die aktuellen Daten vom Server") }}</li>
       </ol>

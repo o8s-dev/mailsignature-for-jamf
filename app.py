@@ -1051,9 +1051,9 @@ def deploy_pppc():
     <array>
         <dict>
             <key>PayloadDescription</key>
-            <string>Erlaubt dem Sig-Manager-Script (osascript) Apple Mail per AppleScript zu steuern.</string>
+            <string>Erlaubt dem MailSign-Script (osascript) Apple Mail per AppleScript zu steuern.</string>
             <key>PayloadDisplayName</key>
-            <string>Sig Manager – Mail Automation</string>
+            <string>MailSign – Mail Automation</string>
             <key>PayloadIdentifier</key>
             <string>com.mailsign.pppc.mail-automation.{payload_uuid}</string>
             <key>PayloadType</key>
@@ -1107,9 +1107,9 @@ def deploy_pppc():
         </dict>
     </array>
     <key>PayloadDescription</key>
-    <string>Erlaubt dem Sig Manager Deployment Script Apple Mail per AppleScript zu steuern.</string>
+    <string>Erlaubt dem MailSign Deployment Script Apple Mail per AppleScript zu steuern.</string>
     <key>PayloadDisplayName</key>
-    <string>Sig Manager – Mail Automation PPPC</string>
+    <string>MailSign – Mail Automation PPPC</string>
     <key>PayloadIdentifier</key>
     <string>com.mailsign.pppc.mail-automation</string>
     <key>PayloadScope</key>
@@ -1124,7 +1124,7 @@ def deploy_pppc():
 </plist>"""
     return Response(content, mimetype="application/x-apple-aspen-config",
                     headers={"Content-Disposition":
-                             "attachment; filename=SigManager-MailAutomation-PPPC.mobileconfig"})
+                             "attachment; filename=MailSign-MailAutomation-PPPC.mobileconfig"})
 
 
 @app.route("/deploy")

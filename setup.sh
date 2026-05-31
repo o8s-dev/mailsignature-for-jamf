@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# Sig Manager – Setup-Script für macOS (Mac mini / Server)
+# MailSign – Setup-Script für macOS (Mac mini / Server)
 # Installiert den Dienst als launchd-Daemon (startet automatisch beim Boot)
 # =============================================================================
 set -euo pipefail
@@ -21,7 +21,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 header "========================================="
-header "  Sig Manager – Server Setup"
+header "  MailSign – Server Setup"
 header "========================================="
 echo ""
 
@@ -119,9 +119,9 @@ ok "Wrapper-Script: $WRAPPER"
 # ---- LaunchDaemon-Plist installieren ----------------------------------------
 header "4/5  launchd-Daemon installieren"
 
-PLIST_NAME="com.mailsign.sig-manager"
+PLIST_NAME="com.mailsign.app"
 PLIST_PATH="/Library/LaunchDaemons/${PLIST_NAME}.plist"
-LOG_DIR="/var/log/sig-manager"
+LOG_DIR="/var/log/mailsign"
 
 mkdir -p "$LOG_DIR"
 chown "$SERVICE_USER" "$LOG_DIR"
@@ -209,7 +209,7 @@ LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/n
 echo -e "  ${GREEN}Web-UI:${NC}        http://${LOCAL_IP}:${PORT}"
 echo -e "  ${GREEN}API-Endpunkt:${NC}  http://${LOCAL_IP}:${PORT}/api/signatures.json"
 echo ""
-echo -e "  ${BOLD}Diese URL im Sig Manager unter 'Jamf Script' eintragen:${NC}"
+echo -e "  ${BOLD}Diese URL in MailSign unter 'Jamf Script' eintragen:${NC}"
 echo -e "  http://${LOCAL_IP}:${PORT}"
 echo ""
 echo -e "  ${YELLOW}Logs:${NC}  tail -f ${LOG_DIR}/stderr.log"

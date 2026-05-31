@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-31 14:52+0200\n"
+"POT-Creation-Date: 2026-05-31 16:04+0200\n"
 "PO-Revision-Date: 2026-05-31 05:50+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -124,10 +124,6 @@ msgstr ""
 "Web-Tool über die echte IP-Adresse des Servers (z.B. "
 "http://192.168.1.x:5050) und laden Sie das Script dann erneut herunter."
 
-#: templates/base.html:6
-msgid "Mail Signatur Manager"
-msgstr "Mail Signatur Manager"
-
 #: templates/base.html:32
 msgid "Übersicht"
 msgstr "Übersicht"
@@ -219,8 +215,8 @@ msgstr ""
 "findet das Script keine Mail-Accounts."
 
 #: templates/deploy.html:33
-msgid "SigManager-MailAutomation-PPPC.mobileconfig herunterladen"
-msgstr "SigManager-MailAutomation-PPPC.mobileconfig herunterladen"
+msgid "MailSign-MailAutomation-PPPC.mobileconfig herunterladen"
+msgstr "MailSign-MailAutomation-PPPC.mobileconfig herunterladen"
 
 #: templates/deploy.html:36
 msgid "In Jamf:"
@@ -292,8 +288,8 @@ msgid "Bei Änderungen (neuer Mitarbeiter, Logo-Update, Textänderung):"
 msgstr "Bei Änderungen (neuer Mitarbeiter, Logo-Update, Textänderung):"
 
 #: templates/deploy.html:81
-msgid "Daten im Sig Manager anpassen"
-msgstr "Daten im Sig Manager anpassen"
+msgid "Daten in MailSign anpassen"
+msgstr "Daten in MailSign anpassen"
 
 #: templates/deploy.html:82
 msgid "Policy in Jamf manuell auslösen"
@@ -973,4 +969,7 @@ msgstr "Ich"
 
 #~ msgid "Kleiner Text am Ende der Signatur (DE + EN)."
 #~ msgstr "Kleiner Text am Ende der Signatur (DE + EN)."
+
+#~ msgid "Mail Signatur Manager"
+#~ msgstr "Mail Signatur Manager"
 

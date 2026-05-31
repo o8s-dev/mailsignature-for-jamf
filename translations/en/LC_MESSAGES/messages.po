@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-31 14:52+0200\n"
+"POT-Creation-Date: 2026-05-31 16:04+0200\n"
 "PO-Revision-Date: 2026-05-31 05:50+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -124,10 +124,6 @@ msgstr ""
 "tool via the server's real IP address (e.g. http://192.168.1.x:5050) and "
 "download the script again."
 
-#: templates/base.html:6
-msgid "Mail Signatur Manager"
-msgstr "Mail Signature Manager"
-
 #: templates/base.html:32
 msgid "Übersicht"
 msgstr "Overview"
@@ -221,8 +217,8 @@ msgstr ""
 "mail accounts."
 
 #: templates/deploy.html:33
-msgid "SigManager-MailAutomation-PPPC.mobileconfig herunterladen"
-msgstr "Download SigManager-MailAutomation-PPPC.mobileconfig"
+msgid "MailSign-MailAutomation-PPPC.mobileconfig herunterladen"
+msgstr "Download MailSign-MailAutomation-PPPC.mobileconfig"
 
 #: templates/deploy.html:36
 msgid "In Jamf:"
@@ -294,8 +290,8 @@ msgid "Bei Änderungen (neuer Mitarbeiter, Logo-Update, Textänderung):"
 msgstr "On changes (new member, logo update, text change):"
 
 #: templates/deploy.html:81
-msgid "Daten im Sig Manager anpassen"
-msgstr "Adjust the data in Sig Manager"
+msgid "Daten in MailSign anpassen"
+msgstr "Adjust the data in MailSign"
 
 #: templates/deploy.html:82
 msgid "Policy in Jamf manuell auslösen"
@@ -975,4 +971,7 @@ msgstr "Me"
 
 #~ msgid "Kleiner Text am Ende der Signatur (DE + EN)."
 #~ msgstr "Small text at the end of the signature (DE + EN)."
+
+#~ msgid "Mail Signatur Manager"
+#~ msgstr "Mail Signature Manager"
 
