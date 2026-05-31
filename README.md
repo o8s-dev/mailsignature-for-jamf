@@ -2,7 +2,7 @@
 
 **Centrally manage Apple Mail signatures for your whole fleet and deploy them with Jamf Pro — self-hosted, no third-party cloud.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Source-available (Commons Clause)](https://img.shields.io/badge/license-source--available%20%C2%B7%20Commons%20Clause-orange.svg)](LICENSE)
 ![Platform: macOS 12–15](https://img.shields.io/badge/macOS-12–15-lightgrey)
 ![Built with: Flask](https://img.shields.io/badge/built%20with-Flask-000)
 
@@ -29,7 +29,7 @@ multi-tenant service. → **[o8s.dev](https://o8s.dev)**
 
 | | Self-hosted (this repo) | MailSign Cloud |
 |---|---|---|
-| **Price** | Free (MIT) | Subscription |
+| **Price** | Free (source-available) | Subscription |
 | **Hosting & updates** | You | We host & maintain it |
 | **Organizations** | Single instance, you manage | Isolated tenant, multi-org |
 | **Support** | Community | Included |
@@ -176,4 +176,7 @@ others find it.
 
 ## License
 
-Released under the [MIT License](LICENSE). Use it freely, including commercially.
+**Source-available** under the MIT License **plus the [Commons Clause](LICENSE)**.
+You may use, self-host, modify and share it freely — but you may **not sell it or offer
+it as a paid hosted/managed service**. For a managed offering, see
+**[MailSign Cloud](https://o8s.dev)**.

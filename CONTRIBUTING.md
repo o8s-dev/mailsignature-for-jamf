@@ -66,4 +66,4 @@ reliably. New layouts live in `templates/signatures/` and are registered in
 ## License
 
 By contributing you agree that your contributions are licensed under the
-[MIT License](LICENSE).
+project's [license](LICENSE) (MIT + Commons Clause).
