@@ -18,8 +18,26 @@ data — it runs on your own server.
 > a place to manage signatures and a script that deploys them reliably. MailSign is
 > exactly that, on infrastructure you control.
 
+## Self-host or use MailSign Cloud
+
+This repository is the **free, self-hosted edition** — you run it on your own server and
+manage your signatures yourself.
+
+Don't want to run a server, or need to manage **multiple organizations** with isolated
+logins? Let us host, update and support it for you with **MailSign Cloud** — a managed,
+multi-tenant service. → **[o8s.dev](https://o8s.dev)**
+
+| | Self-hosted (this repo) | MailSign Cloud |
+|---|---|---|
+| **Price** | Free (MIT) | Subscription |
+| **Hosting & updates** | You | We host & maintain it |
+| **Organizations** | Single instance, you manage | Isolated tenant, multi-org |
+| **Support** | Community | Included |
+| **Best for** | Tinkerers · single org · full control | Teams / MSPs who want it to just work |
+
 ## Contents
 
+- [Self-host or use MailSign Cloud](#self-host-or-use-mailsign-cloud)
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Requirements](#requirements)
@@ -143,8 +161,8 @@ tar czf mailsign-backup-$(date +%F).tar.gz data static/logos
 MailSign is **single-tenant** in terms of access: every logged-in user can see and manage
 **all** organizations (the `admin` flag only governs user management). This is ideal for
 running it for your own company, or as a managed service where **you** maintain everyone's
-signatures. Per-customer self-service with isolated logins (multi-tenancy) is **not** built
-in yet.
+signatures. Per-customer self-service with isolated logins (multi-tenancy) is **not** part
+of the self-hosted edition — that's what **[MailSign Cloud](https://o8s.dev)** is for.
 
 ## Contributing
 
