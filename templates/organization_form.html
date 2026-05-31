@@ -49,6 +49,17 @@
         </div>
         <div class="form-text">{{ _("PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px") }}</div>
       </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-medium">{{ _("Signatur-Vorlage") }}</label>
+        {% set cur = organization.template if organization and organization.template else 'classic' %}
+        <select name="template" class="form-select">
+          <option value="classic" {{ 'selected' if cur == 'classic' else '' }}>{{ _("Klassisch (Standard)") }}</option>
+          <option value="minimal" {{ 'selected' if cur == 'minimal' else '' }}>{{ _("Minimal (nur Text)") }}</option>
+          <option value="logo" {{ 'selected' if cur == 'logo' else '' }}>{{ _("Mit Logo (Logo links, Text rechts)") }}</option>
+          <option value="compact" {{ 'selected' if cur == 'compact' else '' }}>{{ _("Kompakt (wenige Zeilen)") }}</option>
+        </select>
+        <div class="form-text">{{ _("Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation.") }}</div>
+      </div>
       <div class="col-12">
         <label class="form-label fw-medium">{{ _("Hinweistext") }}</label>
         <textarea name="custom_note" class="form-control" rows="3">{{ organization.custom_note if organization else default_custom_note }}</textarea>

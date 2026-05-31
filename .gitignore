@@ -1,0 +1,15 @@
+# Secrets & lokale Konfiguration
+.env
+
+# Laufzeitdaten (nicht versionieren)
+data/
+static/logos/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS
+.DS_Store

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-31 06:20+0000\n"
+"POT-Creation-Date: 2026-05-31 14:24+0200\n"
 "PO-Revision-Date: 2026-05-31 05:50+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -18,101 +18,111 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app.py:419
+#: app.py:449
 msgid "Erster Administrator-Account erstellt."
 msgstr "Erster Administrator-Account erstellt."
 
-#: app.py:438
+#: app.py:468
 msgid "Benutzername oder Passwort falsch."
 msgstr "Benutzername oder Passwort falsch."
 
-#: app.py:495
+#: app.py:525
 msgid "Benutzername und Passwort sind Pflichtfelder."
 msgstr "Benutzername und Passwort sind Pflichtfelder."
 
-#: app.py:503
+#: app.py:533
 #, python-format
 msgid "Benutzer '%(name)s' erstellt."
 msgstr "Benutzer '%(name)s' erstellt."
 
-#: app.py:506
+#: app.py:536
 msgid "Benutzername bereits vergeben."
 msgstr "Benutzername bereits vergeben."
 
-#: app.py:533
+#: app.py:563
 msgid "Benutzer aktualisiert."
 msgstr "Benutzer aktualisiert."
 
-#: app.py:544
+#: app.py:574
 msgid "Du kannst deinen eigenen Account nicht löschen."
 msgstr "Du kannst deinen eigenen Account nicht löschen."
 
-#: app.py:549
+#: app.py:579
 msgid "Der letzte Benutzer kann nicht gelöscht werden."
 msgstr "Der letzte Benutzer kann nicht gelöscht werden."
 
-#: app.py:552
+#: app.py:582
 msgid "Benutzer gelöscht."
 msgstr "Benutzer gelöscht."
 
-#: app.py:596 app.py:636
+#: app.py:626 app.py:667
 msgid "Name der Organisation ist erforderlich."
 msgstr "Name der Organisation ist erforderlich."
 
-#: app.py:619
+#: app.py:650
 #, python-format
 msgid "Organisation «%(name)s» erstellt."
 msgstr "Organisation «%(name)s» erstellt."
 
-#: app.py:664
+#: app.py:696
 #, python-format
 msgid "Organisation «%(name)s» gespeichert."
 msgstr "Organisation «%(name)s» gespeichert."
 
-#: app.py:683
+#: app.py:715
 #, python-format
 msgid "Organisation «%(name)s» gelöscht."
 msgstr "Organisation «%(name)s» gelöscht."
 
-#: app.py:746 app.py:782
+#: app.py:778 app.py:814
 msgid "E-Mail, Vorname und Organisation sind Pflichtfelder."
 msgstr "E-Mail, Vorname und Organisation sind Pflichtfelder."
 
-#: app.py:762
+#: app.py:794
 #, python-format
 msgid "%(name)s wurde angelegt."
 msgstr "%(name)s wurde angelegt."
 
-#: app.py:798
+#: app.py:830
 #, python-format
 msgid "%(name)s gespeichert."
 msgstr "%(name)s gespeichert."
 
-#: app.py:812
+#: app.py:844
 #, python-format
 msgid "%(name)s gelöscht."
 msgstr "%(name)s gelöscht."
 
-#: app.py:830
+#: app.py:862
 msgid "Bitte eine Organisation auswählen."
 msgstr "Bitte eine Organisation auswählen."
 
-#: app.py:833
+#: app.py:865
 msgid "Bitte eine CSV-Datei hochladen."
 msgstr "Bitte eine CSV-Datei hochladen."
 
-#: app.py:892
+#: app.py:924
 #, python-format
 msgid "Import abgeschlossen: %(a)s neu, %(u)s aktualisiert, %(s)s übersprungen."
 msgstr "Import abgeschlossen: %(a)s neu, %(u)s aktualisiert, %(s)s übersprungen."
 
-#: app.py:1027
-msgid "API-Key wurde neu generiert. Bitte das Jamf-Script erneut herunterladen und in Jamf aktualisieren."
-msgstr "API-Key wurde neu generiert. Bitte das Jamf-Script erneut herunterladen und in Jamf aktualisieren."
+#: app.py:1059
+msgid ""
+"API-Key wurde neu generiert. Bitte das Jamf-Script erneut herunterladen "
+"und in Jamf aktualisieren."
+msgstr ""
+"API-Key wurde neu generiert. Bitte das Jamf-Script erneut herunterladen "
+"und in Jamf aktualisieren."
 
-#: app.py:1037
-msgid "Achtung: Das Script enthält 'localhost' als Server-URL. Öffnen Sie das Web-Tool über die echte IP-Adresse des Servers (z.B. http://192.168.1.x:5050) und laden Sie das Script dann erneut herunter."
-msgstr "Achtung: Das Script enthält 'localhost' als Server-URL. Öffnen Sie das Web-Tool über die echte IP-Adresse des Servers (z.B. http://192.168.1.x:5050) und laden Sie das Script dann erneut herunter."
+#: app.py:1069
+msgid ""
+"Achtung: Das Script enthält 'localhost' als Server-URL. Öffnen Sie das "
+"Web-Tool über die echte IP-Adresse des Servers (z.B. "
+"http://192.168.1.x:5050) und laden Sie das Script dann erneut herunter."
+msgstr ""
+"Achtung: Das Script enthält 'localhost' als Server-URL. Öffnen Sie das "
+"Web-Tool über die echte IP-Adresse des Servers (z.B. "
+"http://192.168.1.x:5050) und laden Sie das Script dann erneut herunter."
 
 #: templates/base.html:6
 msgid "Mail Signatur Manager"
@@ -199,8 +209,14 @@ msgid "einmalig"
 msgstr "einmalig"
 
 #: templates/deploy.html:30
-msgid "Damit das Script Apple Mail per AppleScript steuern darf, muss dieses Konfigurationsprofil auf alle Geräte deployed werden. Ohne dieses Profil findet das Script keine Mail-Accounts."
-msgstr "Damit das Script Apple Mail per AppleScript steuern darf, muss dieses Konfigurationsprofil auf alle Geräte deployed werden. Ohne dieses Profil findet das Script keine Mail-Accounts."
+msgid ""
+"Damit das Script Apple Mail per AppleScript steuern darf, muss dieses "
+"Konfigurationsprofil auf alle Geräte deployed werden. Ohne dieses Profil "
+"findet das Script keine Mail-Accounts."
+msgstr ""
+"Damit das Script Apple Mail per AppleScript steuern darf, muss dieses "
+"Konfigurationsprofil auf alle Geräte deployed werden. Ohne dieses Profil "
+"findet das Script keine Mail-Accounts."
 
 #: templates/deploy.html:33
 msgid "SigManager-MailAutomation-PPPC.mobileconfig herunterladen"
@@ -235,7 +251,7 @@ msgid "Unter"
 msgstr "Unter"
 
 #: templates/deploy.html:51 templates/employee_form.html:83
-#: templates/organization_form.html:65 templates/user_form.html:41
+#: templates/organization_form.html:76 templates/user_form.html:41
 msgid "Speichern"
 msgstr "Speichern"
 
@@ -316,8 +332,12 @@ msgid "API-Key"
 msgstr "API-Key"
 
 #: templates/deploy.html:108
-msgid "Alle API-Endpunkte sind mit diesem Schlüssel geschützt. Er ist im heruntergeladenen Script bereits enthalten."
-msgstr "Alle API-Endpunkte sind mit diesem Schlüssel geschützt. Er ist im heruntergeladenen Script bereits enthalten."
+msgid ""
+"Alle API-Endpunkte sind mit diesem Schlüssel geschützt. Er ist im "
+"heruntergeladenen Script bereits enthalten."
+msgstr ""
+"Alle API-Endpunkte sind mit diesem Schlüssel geschützt. Er ist im "
+"heruntergeladenen Script bereits enthalten."
 
 #: templates/deploy.html:121
 msgid "Neu generieren"
@@ -435,7 +455,7 @@ msgid "Vorschau"
 msgstr "Vorschau"
 
 #: templates/employee_form.html:91 templates/employees.html:129
-#: templates/organization_form.html:67 templates/organizations.html:75
+#: templates/organization_form.html:78 templates/organizations.html:75
 #: templates/user_form.html:43
 msgid "Abbrechen"
 msgstr "Abbrechen"
@@ -515,7 +535,7 @@ msgid "Datei auswählen"
 msgstr "Datei auswählen"
 
 #: templates/import.html:23 templates/import.html:111
-#: templates/organization_form.html:48 templates/organization_form.html:75
+#: templates/organization_form.html:48 templates/organization_form.html:86
 msgid "Keine Datei ausgewählt"
 msgstr "Keine Datei ausgewählt"
 
@@ -745,14 +765,38 @@ msgid "PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px"
 msgstr "PNG, JPG, SVG oder TIFF. Empfohlen: max. 400×100 px"
 
 #: templates/organization_form.html:53
+msgid "Signatur-Vorlage"
+msgstr "Signatur-Vorlage"
+
+#: templates/organization_form.html:56
+msgid "Klassisch (Standard)"
+msgstr ""
+
+#: templates/organization_form.html:57
+msgid "Minimal (nur Text)"
+msgstr ""
+
+#: templates/organization_form.html:58
+msgid "Mit Logo (Logo links, Text rechts)"
+msgstr ""
+
+#: templates/organization_form.html:59
+msgid "Kompakt (wenige Zeilen)"
+msgstr ""
+
+#: templates/organization_form.html:61
+msgid "Layout der Signatur – gilt für alle Mitarbeiter dieser Organisation."
+msgstr ""
+
+#: templates/organization_form.html:64
 msgid "Hinweistext"
 msgstr "Hinweistext"
 
-#: templates/organization_form.html:55
+#: templates/organization_form.html:66
 msgid "Wird direkt unterhalb des Logos in der Signatur angezeigt."
 msgstr "Wird direkt unterhalb des Logos in der Signatur angezeigt."
 
-#: templates/organization_form.html:60
+#: templates/organization_form.html:71
 msgid "Kleiner Text am Ende der Signatur (DE + EN)."
 msgstr "Kleiner Text am Ende der Signatur (DE + EN)."
 

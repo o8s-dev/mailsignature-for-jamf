@@ -126,6 +126,7 @@ def init_db():
             logo        TEXT,
             custom_note TEXT,
             disclaimer  TEXT,
+            template    TEXT DEFAULT 'classic',
             created_at  TEXT DEFAULT (datetime('now')),
             updated_at  TEXT DEFAULT (datetime('now'))
         );
@@ -172,6 +173,11 @@ def migrate_db():
         user_cols = {c["name"] for c in conn.execute("PRAGMA table_info(users)").fetchall()}
         if "language" not in user_cols:
             conn.execute("ALTER TABLE users ADD COLUMN language TEXT")
+
+        # organizations: template-Spalte für Signatur-Vorlagenauswahl
+        org_cols = {c["name"] for c in conn.execute("PRAGMA table_info(organizations)").fetchall()}
+        if "template" not in org_cols:
+            conn.execute("ALTER TABLE organizations ADD COLUMN template TEXT DEFAULT 'classic'")
 
         # Step 1: Add missing columns via ALTER TABLE
         for col, definition in [
@@ -248,6 +254,21 @@ def sig_uuid_for(email):
     return str(uuid.uuid5(uuid.NAMESPACE_DNS, email.lower().strip()))
 
 
+# Signatur-Vorlagen: Schlüssel → Template-Datei. Auswahl erfolgt pro Organisation.
+SIGNATURE_TEMPLATES = {
+    "classic": "signature_body.html",
+    "minimal": "signatures/minimal.html",
+    "logo":    "signatures/logo.html",
+    "compact": "signatures/compact.html",
+}
+DEFAULT_SIGNATURE_TEMPLATE = "classic"
+
+
+def normalize_template(name):
+    """Gültigen Vorlagen-Schlüssel zurückgeben (Fallback: Standard)."""
+    return name if name in SIGNATURE_TEMPLATES else DEFAULT_SIGNATURE_TEMPLATE
+
+
 def build_signature_payload(emp, organization):
     logo_b64 = None
     if organization["logo"]:
@@ -283,8 +304,14 @@ def build_signature_payload(emp, organization):
         stored_uuid = ""
     sig_uuid_val = stored_uuid or sig_uuid_for(emp["email"])
 
+    try:
+        template_name = normalize_template(organization["template"] or DEFAULT_SIGNATURE_TEMPLATE)
+    except (IndexError, KeyError):
+        template_name = DEFAULT_SIGNATURE_TEMPLATE
+
     return {
         "sig_uuid": sig_uuid_val,
+        "template": template_name,
         "sig_name": sig_name,
         "title": emp["title"] or "",
         "first_name": emp["first_name"],
@@ -303,7 +330,10 @@ def build_signature_payload(emp, organization):
 
 
 def render_signature_html(payload):
-    return render_template("signature_body.html", **payload)
+    template_file = SIGNATURE_TEMPLATES.get(
+        payload.get("template"), SIGNATURE_TEMPLATES[DEFAULT_SIGNATURE_TEMPLATE]
+    )
+    return render_template(template_file, **payload)
 
 
 # ---------------------------------------------------------------------------
@@ -607,15 +637,16 @@ def organization_new():
 
         with get_db() as conn:
             conn.execute("""
-                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (name,
                   request.form.get("address1", "").strip(),
                   request.form.get("address2", "").strip(),
                   request.form.get("phone", "").strip(),
                   logo,
                   request.form.get("custom_note", "").strip() or DEFAULT_CUSTOM_NOTE,
-                  request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER))
+                  request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
+                  normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE))))
         flash(_("Organisation «%(name)s» erstellt.", name=name), "success")
         return redirect(url_for("organizations"))
     return render_template("organization_form.html", organization=None,
@@ -651,7 +682,7 @@ def organization_edit(oid):
 
             conn.execute("""
                 UPDATE organizations SET name=?, address1=?, address2=?, phone=?,
-                logo=?, custom_note=?, disclaimer=?, updated_at=datetime('now')
+                logo=?, custom_note=?, disclaimer=?, template=?, updated_at=datetime('now')
                 WHERE id=?
             """, (name,
                   request.form.get("address1", "").strip(),
@@ -660,6 +691,7 @@ def organization_edit(oid):
                   logo,
                   request.form.get("custom_note", "").strip() or DEFAULT_CUSTOM_NOTE,
                   request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
+                  normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
                   oid))
             flash(_("Organisation «%(name)s» gespeichert.", name=name), "success")
             return redirect(url_for("organizations"))
