@@ -4,6 +4,7 @@ import csv
 import json
 import uuid
 import hmac
+import fcntl
 import secrets
 import quopri
 import sqlite3
@@ -1425,8 +1426,18 @@ def csv_template():
 # ---------------------------------------------------------------------------
 # DB beim Import initialisieren/migrieren, damit es auch unter gunicorn
 # (das app:app importiert und den __main__-Block NICHT ausführt) passiert.
-init_db()
-migrate_db()
+# Prozess-übergreifender Lock: gunicorn importiert app:app in JEDEM Worker,
+# d.h. ohne Lock laufen mehrere Worker die Migration gleichzeitig → Race
+# (z.B. "duplicate column" beim parallelen ALTER TABLE). Der zweite Worker
+# wartet und migriert danach idempotent.
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+with open(DB_PATH.parent / ".migrate.lock", "w") as _migrate_lock:
+    fcntl.flock(_migrate_lock, fcntl.LOCK_EX)
+    try:
+        init_db()
+        migrate_db()
+    finally:
+        fcntl.flock(_migrate_lock, fcntl.LOCK_UN)
 
 
 # ---------------------------------------------------------------------------
