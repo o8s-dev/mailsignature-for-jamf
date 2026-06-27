@@ -68,6 +68,26 @@
                value="{{ organization.accent_color if organization and organization.accent_color else '#2563EB' }}">
         <div class="form-text">{{ _("Firmenfarbe für die Akzentbalken-Vorlage.") }}</div>
       </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-medium">{{ _("Schriftgrösse Signaturtext") }}</label>
+        {% set cur_bfs = organization.body_font_size if organization and organization.body_font_size else default_body_font_size %}
+        <select name="body_font_size" class="form-select">
+          {% for size in body_font_sizes %}
+          <option value="{{ size }}" {{ 'selected' if size == cur_bfs else '' }}>{{ size }} px{{ ' ' ~ _("(Standard)") if size == default_body_font_size else '' }}</option>
+          {% endfor %}
+        </select>
+        <div class="form-text">{{ _("Schriftgrösse für Name, Adresse und Kontaktdaten.") }}</div>
+      </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-medium">{{ _("Schriftgrösse Disclaimer") }}</label>
+        {% set cur_dfs = organization.disclaimer_font_size if organization and organization.disclaimer_font_size else default_disclaimer_font_size %}
+        <select name="disclaimer_font_size" class="form-select">
+          {% for size in disclaimer_font_sizes %}
+          <option value="{{ size }}" {{ 'selected' if size == cur_dfs else '' }}>{{ size }} px{{ ' ' ~ _("(Standard)") if size == default_disclaimer_font_size else '' }}</option>
+          {% endfor %}
+        </select>
+        <div class="form-text">{{ _("Schriftgrösse für Hinweistext und Disclaimer.") }}</div>
+      </div>
       <div class="col-12">
         <label class="form-label fw-medium">{{ _("Eigenes HTML") }}</label>
         <textarea name="custom_html" class="form-control font-monospace" rows="8" spellcheck="false"

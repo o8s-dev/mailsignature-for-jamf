@@ -130,6 +130,8 @@ def init_db():
             template    TEXT DEFAULT 'classic',
             accent_color TEXT,
             custom_html TEXT,
+            body_font_size       INTEGER,
+            disclaimer_font_size INTEGER,
             created_at  TEXT DEFAULT (datetime('now')),
             updated_at  TEXT DEFAULT (datetime('now'))
         );
@@ -185,6 +187,10 @@ def migrate_db():
             conn.execute("ALTER TABLE organizations ADD COLUMN accent_color TEXT")
         if "custom_html" not in org_cols:
             conn.execute("ALTER TABLE organizations ADD COLUMN custom_html TEXT")
+        if "body_font_size" not in org_cols:
+            conn.execute("ALTER TABLE organizations ADD COLUMN body_font_size INTEGER")
+        if "disclaimer_font_size" not in org_cols:
+            conn.execute("ALTER TABLE organizations ADD COLUMN disclaimer_font_size INTEGER")
 
         # Step 1: Add missing columns via ALTER TABLE
         for col, definition in [
@@ -272,6 +278,21 @@ SIGNATURE_TEMPLATES = {
 DEFAULT_SIGNATURE_TEMPLATE = "classic"
 DEFAULT_ACCENT_COLOR = "#2563EB"
 
+# Schriftgrössen (in px) – pro Organisation per Auswahl einstellbar.
+BODY_FONT_SIZES = [10, 11, 12, 13, 14, 15, 16]
+DISCLAIMER_FONT_SIZES = [7, 8, 9, 10, 11, 12]
+DEFAULT_BODY_FONT_SIZE = 12
+DEFAULT_DISCLAIMER_FONT_SIZE = 9
+
+
+def normalize_font_size(value, allowed, default):
+    """Schriftgrösse auf erlaubte Werte begrenzen (schützt vor CSS-Injection)."""
+    try:
+        size = int(value)
+    except (TypeError, ValueError):
+        return default
+    return size if size in allowed else default
+
 # "custom" = vom Power-User selbst geschriebenes HTML mit Platzhaltern.
 # Wird NICHT als Jinja gerendert (SSTI-Schutz), sondern per fester
 # Platzhalter-Ersetzung mit escapten Werten – siehe render_custom_html().
@@ -349,11 +370,25 @@ def build_signature_payload(emp, organization):
     except (IndexError, KeyError):
         custom_html = ""
 
+    try:
+        body_font_size = normalize_font_size(
+            organization["body_font_size"], BODY_FONT_SIZES, DEFAULT_BODY_FONT_SIZE)
+    except (IndexError, KeyError):
+        body_font_size = DEFAULT_BODY_FONT_SIZE
+
+    try:
+        disclaimer_font_size = normalize_font_size(
+            organization["disclaimer_font_size"], DISCLAIMER_FONT_SIZES, DEFAULT_DISCLAIMER_FONT_SIZE)
+    except (IndexError, KeyError):
+        disclaimer_font_size = DEFAULT_DISCLAIMER_FONT_SIZE
+
     return {
         "sig_uuid": sig_uuid_val,
         "template": template_name,
         "accent_color": accent_color,
         "custom_html": custom_html,
+        "body_font_size": body_font_size,
+        "disclaimer_font_size": disclaimer_font_size,
         "sig_name": sig_name,
         "title": emp["title"] or "",
         "first_name": emp["first_name"],
@@ -709,7 +744,11 @@ def organization_new():
             flash(_("Name der Organisation ist erforderlich."), "danger")
             return render_template("organization_form.html", organization=None,
                                    default_custom_note=DEFAULT_CUSTOM_NOTE,
-                                   default_disclaimer=DEFAULT_DISCLAIMER)
+                                   default_disclaimer=DEFAULT_DISCLAIMER,
+                           body_font_sizes=BODY_FONT_SIZES,
+                           disclaimer_font_sizes=DISCLAIMER_FONT_SIZES,
+                           default_body_font_size=DEFAULT_BODY_FONT_SIZE,
+                           default_disclaimer_font_size=DEFAULT_DISCLAIMER_FONT_SIZE)
         logo = None
         file = request.files.get("logo")
         if file and file.filename and allowed_file(file.filename):
@@ -720,8 +759,8 @@ def organization_new():
 
         with get_db() as conn:
             conn.execute("""
-                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template, accent_color, custom_html)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO organizations (name, address1, address2, phone, logo, custom_note, disclaimer, template, accent_color, custom_html, body_font_size, disclaimer_font_size)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (name,
                   request.form.get("address1", "").strip(),
                   request.form.get("address2", "").strip(),
@@ -731,12 +770,18 @@ def organization_new():
                   request.form.get("disclaimer", "").strip() or DEFAULT_DISCLAIMER,
                   normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
                   normalize_color(request.form.get("accent_color")),
-                  request.form.get("custom_html", "").strip()))
+                  request.form.get("custom_html", "").strip(),
+                  normalize_font_size(request.form.get("body_font_size"), BODY_FONT_SIZES, DEFAULT_BODY_FONT_SIZE),
+                  normalize_font_size(request.form.get("disclaimer_font_size"), DISCLAIMER_FONT_SIZES, DEFAULT_DISCLAIMER_FONT_SIZE)))
         flash(_("Organisation «%(name)s» erstellt.", name=name), "success")
         return redirect(url_for("organizations"))
     return render_template("organization_form.html", organization=None,
                            default_custom_note=DEFAULT_CUSTOM_NOTE,
-                           default_disclaimer=DEFAULT_DISCLAIMER)
+                           default_disclaimer=DEFAULT_DISCLAIMER,
+                           body_font_sizes=BODY_FONT_SIZES,
+                           disclaimer_font_sizes=DISCLAIMER_FONT_SIZES,
+                           default_body_font_size=DEFAULT_BODY_FONT_SIZE,
+                           default_disclaimer_font_size=DEFAULT_DISCLAIMER_FONT_SIZE)
 
 
 @app.route("/organizations/<int:oid>/edit", methods=["GET", "POST"])
@@ -752,7 +797,11 @@ def organization_edit(oid):
                 flash(_("Name der Organisation ist erforderlich."), "danger")
                 return render_template("organization_form.html", organization=organization,
                                        default_custom_note=DEFAULT_CUSTOM_NOTE,
-                                       default_disclaimer=DEFAULT_DISCLAIMER)
+                                       default_disclaimer=DEFAULT_DISCLAIMER,
+                           body_font_sizes=BODY_FONT_SIZES,
+                           disclaimer_font_sizes=DISCLAIMER_FONT_SIZES,
+                           default_body_font_size=DEFAULT_BODY_FONT_SIZE,
+                           default_disclaimer_font_size=DEFAULT_DISCLAIMER_FONT_SIZE)
             logo = organization["logo"]
             file = request.files.get("logo")
             if file and file.filename and allowed_file(file.filename):
@@ -767,7 +816,8 @@ def organization_edit(oid):
 
             conn.execute("""
                 UPDATE organizations SET name=?, address1=?, address2=?, phone=?,
-                logo=?, custom_note=?, disclaimer=?, template=?, accent_color=?, custom_html=?, updated_at=datetime('now')
+                logo=?, custom_note=?, disclaimer=?, template=?, accent_color=?, custom_html=?,
+                body_font_size=?, disclaimer_font_size=?, updated_at=datetime('now')
                 WHERE id=?
             """, (name,
                   request.form.get("address1", "").strip(),
@@ -779,12 +829,18 @@ def organization_edit(oid):
                   normalize_template(request.form.get("template", DEFAULT_SIGNATURE_TEMPLATE)),
                   normalize_color(request.form.get("accent_color")),
                   request.form.get("custom_html", "").strip(),
+                  normalize_font_size(request.form.get("body_font_size"), BODY_FONT_SIZES, DEFAULT_BODY_FONT_SIZE),
+                  normalize_font_size(request.form.get("disclaimer_font_size"), DISCLAIMER_FONT_SIZES, DEFAULT_DISCLAIMER_FONT_SIZE),
                   oid))
             flash(_("Organisation «%(name)s» gespeichert.", name=name), "success")
             return redirect(url_for("organizations"))
     return render_template("organization_form.html", organization=organization,
                            default_custom_note=DEFAULT_CUSTOM_NOTE,
-                           default_disclaimer=DEFAULT_DISCLAIMER)
+                           default_disclaimer=DEFAULT_DISCLAIMER,
+                           body_font_sizes=BODY_FONT_SIZES,
+                           disclaimer_font_sizes=DISCLAIMER_FONT_SIZES,
+                           default_body_font_size=DEFAULT_BODY_FONT_SIZE,
+                           default_disclaimer_font_size=DEFAULT_DISCLAIMER_FONT_SIZE)
 
 
 @app.route("/organizations/<int:oid>/delete", methods=["POST"])

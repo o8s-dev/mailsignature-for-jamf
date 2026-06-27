@@ -5,9 +5,11 @@
 </head>
 <body style="margin:0; padding:0;">
 {%- set ff   = 'Helvetica Neue, Helvetica, Arial, sans-serif' -%}
-{%- set base = 'font-family:' ~ ff ~ '; font-size:12px; color:#000000; line-height:1.5; margin:0; padding:0;' -%}
-{%- set sm   = 'font-family:' ~ ff ~ '; font-size:9px;  line-height:1.4; margin:0; padding:0;' -%}
-<div style="max-width:520px; font-family:{{ ff }}; font-size:12px; color:#000000; line-height:1.5;">
+{%- set bfs  = body_font_size or 12 -%}
+{%- set dfs  = disclaimer_font_size or 9 -%}
+{%- set base = 'font-family:' ~ ff ~ '; font-size:' ~ bfs ~ 'px; color:#000000; line-height:1.5; margin:0; padding:0;' -%}
+{%- set sm   = 'font-family:' ~ ff ~ '; font-size:' ~ dfs ~ 'px; line-height:1.4; margin:0; padding:0;' -%}
+<div style="max-width:520px; font-family:{{ ff }}; font-size:{{ bfs }}px; color:#000000; line-height:1.5;">
 
   <div style="{{ base }}">Freundliche Grüsse</div>
 

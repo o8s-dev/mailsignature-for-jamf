@@ -5,13 +5,15 @@
 </head>
 <body style="margin:0; padding:0;">
 {%- set ff   = 'Helvetica Neue, Helvetica, Arial, sans-serif' -%}
-{%- set base = 'font-family:' ~ ff ~ '; font-size:12px; color:#000000; line-height:1.5; margin:0; padding:0;' -%}
-{%- set sm   = 'font-family:' ~ ff ~ '; font-size:9px;  line-height:1.4; margin:0; padding:0;' -%}
+{%- set bfs  = body_font_size or 12 -%}
+{%- set dfs  = disclaimer_font_size or 9 -%}
+{%- set base = 'font-family:' ~ ff ~ '; font-size:' ~ bfs ~ 'px; color:#000000; line-height:1.5; margin:0; padding:0;' -%}
+{%- set sm   = 'font-family:' ~ ff ~ '; font-size:' ~ dfs ~ 'px; line-height:1.4; margin:0; padding:0;' -%}
 {%- set accent = accent_color or '#2563EB' -%}
 <table cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
   <tr>
     <td style="background-color:{{ accent }}; width:4px; font-size:0; line-height:0;">&nbsp;</td>
-    <td style="padding-left:14px; font-family:{{ ff }}; font-size:12px; color:#000000; line-height:1.5;">
+    <td style="padding-left:14px; font-family:{{ ff }}; font-size:{{ bfs }}px; color:#000000; line-height:1.5;">
 
       <div style="{{ base }}">Freundliche Grüsse</div>
       <div style="{{ base }} margin-top:6px;">
